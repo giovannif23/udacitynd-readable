@@ -3,10 +3,17 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { rgba } from 'polished';
 
-const Wrapper = styled.div``
-const Header = styled.header``
-const Content = styled.section``
-const Footer = styled.footer``
+const Wrapper = styled.div``;
+const Header = styled.header``;
+const Content = styled.section`
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 0 auto;
+  height: auto;
+  padding: 5rem;
+  width: 100%;
+`;
+const Footer = styled.footer``;
 
 const PageTemplate = ({ header, children, footer, ...props }) => {
   return (
