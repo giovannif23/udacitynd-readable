@@ -1,9 +1,14 @@
 import React from 'react';
+import PageTemplate from '../templates/PageTemplate';
+import Header from '../organisms/Header';
 
 class Index extends React.Component {
   render() {
     return (
-      <h1>Index</h1>
+      <PageTemplate
+        header={<Header/>}>
+        <h1>Index</h1>
+      </PageTemplate>
     );
   }
 }

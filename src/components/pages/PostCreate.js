@@ -1,9 +1,14 @@
 import React from 'react';
+import PageTemplate from '../templates/PageTemplate';
+import Header from '../organisms/Header';
 
 class PostCreate extends React.Component {
   render() {
     return (
-      <h1>Post Create/Edit</h1>
+      <PageTemplate
+        header={<Header/>}>
+        <h1>Post Create/Edit</h1>
+      </PageTemplate>
     );
   }
 }
