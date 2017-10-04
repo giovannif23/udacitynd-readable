@@ -9,6 +9,7 @@ const Content = styled.section`
   box-sizing: border-box;
   display: flex;
   flex: 0 0 auto;
+  flex-direction: column;
   height: auto;
   padding: 5rem;
   width: 100%;
@@ -27,7 +28,6 @@ const PageTemplate = ({ header, children, footer, ...props }) => {
 
 PageTemplate.propTypes = {
   header: PropTypes.node.isRequired,
-  // footer: PropTypes.node.isRequired,
   children: PropTypes.any.isRequired,
 };
 

@@ -10,14 +10,9 @@ const Header = ({...props}) => {
           <Icon type="home" />Home
         </Link>
       </Menu.Item>
-      <Menu.Item key="posts">
-        <Link to="/posts">
-          <Icon type="file-text" />Posts
-        </Link>
-      </Menu.Item>
-      <Menu.Item key="categories">
-        <Link to="/categories">
-          <Icon type="tags-o" />Categories
+      <Menu.Item key="post">
+        <Link to="/post/create">
+          <Icon type="file-text" />Add Post
         </Link>
       </Menu.Item>
     </Menu>

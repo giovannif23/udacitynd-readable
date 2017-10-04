@@ -7,7 +7,7 @@ class PostCreate extends React.Component {
     return (
       <PageTemplate
         header={<Header/>}>
-        <h1>Post Create/Edit</h1>
+        <h1>Add Post</h1>
       </PageTemplate>
     );
   }
