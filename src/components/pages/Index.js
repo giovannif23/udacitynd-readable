@@ -4,7 +4,9 @@ import * as API from '../utils/api';
 import { capitalize } from '../utils/helpers';
 import PageTemplate from '../templates/PageTemplate';
 import Header from '../organisms/Header';
-import { Card, Tag, Row, Col } from 'antd';
+import { Card, Input, Select, Tag, Row, Col } from 'antd';
+
+const Option = Select.Option;
 
 class Index extends React.Component {
   state = {
@@ -34,8 +36,12 @@ class Index extends React.Component {
       <PageTemplate
         header={<Header/>}>
         <Row style={{marginBottom: 20}}>
-          <Col span={24}>
-            <h4 style={{ marginRight: 20 }}>Categories:</h4>
+          <Col span={12}>
+            <Select style={{marginRight: 10}} size="small" defaultValue="Vote Count">
+              <Option value="vote">Vote Count</Option>
+              <Option value="timetamp">Timestamp</Option>
+            </Select>
+
             {categories.map((category, index) => (
               <Link key={index} to={`/${category.path}/posts`}>
                 <Tag color="blue">{capitalize(category.name)}</Tag>
