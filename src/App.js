@@ -7,14 +7,16 @@ import Index from './components/pages/Index'
 import PostsByCategory from './components/pages/PostsByCategory'
 import PostIndex from './components/pages/PostIndex'
 import PostCreate from './components/pages/PostCreate'
+import PostEdit from './components/pages/PostEdit'
 
 const App = () => {
   return (
     <div className="app">
       <Route exact path="/" component={Index} />
       <Route exact path="/:category/posts" component={PostsByCategory} />
-      <Route exact path="/posts" component={PostIndex} />
-      <Route exact path="/post/create" component={PostCreate} />
+      <Route exact path="/post" component={PostCreate} />
+      <Route exact path="/post/:id/edit" component={PostEdit} />
+      <Route exact path="/post/:id" component={PostIndex} />
     </div>
   );
 }

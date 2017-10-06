@@ -11,7 +11,7 @@ const Header = ({...props}) => {
         </Link>
       </Menu.Item>
       <Menu.Item key="post">
-        <Link to="/post/create">
+        <Link to="/post">
           <Icon type="file-text" />Add Post
         </Link>
       </Menu.Item>

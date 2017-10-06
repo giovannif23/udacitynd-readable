@@ -55,7 +55,7 @@ class Index extends React.Component {
     return (
       <PageTemplate
         header={<Header/>}>
-        <Row style={{marginBottom: 20}}>
+        <Row style={{marginBottom: 50}}>
           <Col span={12}>
             <span style={{ marginRight: 5 }}>Sort By:</span> 
             <Select onChange={this.sortPosts} style={{ marginRight: 10, width: 100 }} size="small" defaultValue={sortValue}>
@@ -72,10 +72,10 @@ class Index extends React.Component {
           </Col>
         </Row>
 
-        <Row gutter={16}>
+        <Row gutter={30}>
           {posts.map((post, index) => (
-            <Col className="gutter-row" span={6} key={index}>
-              <Card title={post.title} style={{ width: 300 }}>
+            <Col className="gutter-row" span={8} key={index}>
+              <Card title={<Link to={`post/${post.id}`}>{post.title}</Link>} extra={<Link to={`post/${post.id}/edit`}><Icon style={{ fontSize: 18 }} type="setting" /></Link>} style={{ width: '100%'}}>
                 <p>{post.body}</p>
                 <br />
                 <Link key={index} to={`/${post.category}/posts`}>
