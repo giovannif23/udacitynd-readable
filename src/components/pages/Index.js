@@ -66,7 +66,7 @@ class Index extends React.Component {
 
             {categories.map((category, index) => (
               <Link key={index} to={`/${category.path}/posts`}>
-                <Tag color="purple">{capitalize(category.name)}</Tag>
+                <Tag color="blue">{capitalize(category.name)}</Tag>
               </Link>
             ))}
           </Col>
@@ -79,11 +79,11 @@ class Index extends React.Component {
                 <p>{post.body}</p>
                 <br />
                 <Link key={index} to={`/${post.category}/posts`}>
-                  <Tag color="purple">
+                  <Tag color="blue">
                     <Icon type="tag-o" /> {capitalize(post.category)}
                   </Tag>
                 </Link>
-                <Tag color="purple">
+                <Tag color="blue">
                   <Icon type="like-o" /> {post.voteScore}
                 </Tag>
               </Card>

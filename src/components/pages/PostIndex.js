@@ -5,7 +5,7 @@ import { capitalize } from '../utils/helpers';
 import moment from 'moment';
 import PageTemplate from '../templates/PageTemplate';
 import Header from '../organisms/Header';
-import { Icon, Tag, Row, Col } from 'antd';
+import { Button, Icon, Tag, Row, Col } from 'antd';
 
 class PostIndex extends React.Component {
   state = {
@@ -13,7 +13,6 @@ class PostIndex extends React.Component {
   };
   componentDidMount() {
     const id = this.props.match.params.id;
-    console.log('id', id)
 
     API.getPost(id)
       .then((res) => {
@@ -27,29 +26,39 @@ class PostIndex extends React.Component {
     const { post } = this.state;
     const date = post.timestamp ? moment(post.timestamp).format('MMMM Do, YYYY') : undefined
 
-    console.log('post', post)
-
     return (
       <PageTemplate
         header={<Header/>}>
         <Row>
-          <Col>
+          <Col span={16}>
             <h1>{post.title}</h1>
             <p>{post.body}</p>
+            <div style={{ marginBottom: 10, marginTop: 20 }}>
+              <Link style={{ marginRight: 15 }} to={`${post.id}/edit`}>
+                Edit
+              </Link>
+              <Link to={`${post.id}/edit`}>
+                Delete
+              </Link>
+            </div>
+
+            <Row>
+              <Col>
+                <Tag color="blue">
+                  <Icon type="user" /> {post.author}
+                </Tag>
+                <Tag color="blue">
+                  <Icon type="like-o" /> {post.voteScore}
+                </Tag>
+                <Tag color="blue">
+                  <Icon type="calendar" /> {date}
+                </Tag>
+              </Col>
+            </Row>
           </Col>
-        </Row>
-        <br />
-        <Row>
-          <Col>
-            <Tag color="purple">
-              <Icon type="user" /> {post.author}
-            </Tag>
-            <Tag color="purple">
-              <Icon type="like-o" /> {post.voteScore}
-            </Tag>
-            <Tag color="purple">
-              <Icon type="calendar" /> {date}
-            </Tag>
+
+          <Col span={8}>
+            <h2>Comments</h2>
           </Col>
         </Row>
 
