@@ -4,7 +4,7 @@ import * as API from '../utils/api';
 import { capitalize } from '../utils/helpers';
 import PageTemplate from '../templates/PageTemplate';
 import Header from '../organisms/Header';
-import { Badge, Card, Icon, Input, Select, Tag, Row, Col } from 'antd';
+import { Card, Icon, Input, Select, Tag, Row, Col } from 'antd';
 
 const Option = Select.Option;
 
@@ -66,7 +66,7 @@ class Index extends React.Component {
 
             {categories.map((category, index) => (
               <Link key={index} to={`/${category.path}/posts`}>
-                <Tag color="blue">{capitalize(category.name)}</Tag>
+                <Tag color="purple">{capitalize(category.name)}</Tag>
               </Link>
             ))}
           </Col>
@@ -79,12 +79,12 @@ class Index extends React.Component {
                 <p>{post.body}</p>
                 <br />
                 <Link key={index} to={`/${post.category}/posts`}>
-                  <Tag color="blue">
-                    <Icon type="tag" /> {capitalize(post.category)}
+                  <Tag color="purple">
+                    <Icon type="tag-o" /> {capitalize(post.category)}
                   </Tag>
                 </Link>
-                <Tag color="green">
-                  <Icon type="like" /> {post.voteScore}
+                <Tag color="purple">
+                  <Icon type="like-o" /> {post.voteScore}
                 </Tag>
               </Card>
             </Col>
