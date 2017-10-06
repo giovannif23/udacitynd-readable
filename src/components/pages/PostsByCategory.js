@@ -48,7 +48,9 @@ class PostsByCategory extends React.Component {
             <Col className="gutter-row" span={6} key={index}>
               <Card title={post.title} style={{ width: 300 }}>
                 <p>{post.body}</p>
-                <a href="#"><Tag color="blue">{capitalize(post.category)}</Tag></a>
+                <a href="#"><Tag color="blue">
+                  <Icon type="tag" /> {capitalize(post.category)}
+                </Tag></a>
               </Card>
             </Col>
           ))}

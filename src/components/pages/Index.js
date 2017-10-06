@@ -4,7 +4,7 @@ import * as API from '../utils/api';
 import { capitalize } from '../utils/helpers';
 import PageTemplate from '../templates/PageTemplate';
 import Header from '../organisms/Header';
-import { Card, Input, Select, Tag, Row, Col } from 'antd';
+import { Badge, Card, Icon, Input, Select, Tag, Row, Col } from 'antd';
 
 const Option = Select.Option;
 
@@ -12,6 +12,25 @@ class Index extends React.Component {
   state = {
     categories: [],
     posts: [],
+    sortValue: 'voteScore',
+  };
+
+  sortPosts = (value) => {
+    const sortedPosts = this.state.posts.sort((a, b) => {
+      var a = a[value];
+      var b = b[value];
+      if (a < b) {
+        return -1;
+      }
+      if (a > b) {
+        return 1;
+      }
+      return 0;
+    });
+    this.setState({
+      sortValue: value,
+      posts: sortedPosts,
+    });
   };
 
   componentDidMount() {
@@ -30,16 +49,19 @@ class Index extends React.Component {
   }
 
   render() {
-    const { categories, posts } = this.state;
-
+    const { categories, posts, sortValue } = this.state;
+    console.log(posts)
+    
     return (
       <PageTemplate
         header={<Header/>}>
         <Row style={{marginBottom: 20}}>
           <Col span={12}>
-            <Select style={{marginRight: 10}} size="small" defaultValue="Vote Count">
-              <Option value="vote">Vote Count</Option>
-              <Option value="timetamp">Timestamp</Option>
+            <span style={{ marginRight: 5 }}>Sort By:</span> 
+            <Select onChange={this.sortPosts} style={{ marginRight: 10, width: 100 }} size="small" defaultValue={sortValue}>
+              <Option value="title">Title</Option>
+              <Option value="voteScore">Vote Score</Option>
+              <Option value="timestamp">Newest</Option>
             </Select>
 
             {categories.map((category, index) => (
@@ -55,9 +77,15 @@ class Index extends React.Component {
             <Col className="gutter-row" span={6} key={index}>
               <Card title={post.title} style={{ width: 300 }}>
                 <p>{post.body}</p>
+                <br />
                 <Link key={index} to={`/${post.category}/posts`}>
-                  <Tag color="blue">{capitalize(post.category)}</Tag>
+                  <Tag color="blue">
+                    <Icon type="tag" /> {capitalize(post.category)}
+                  </Tag>
                 </Link>
+                <Tag color="green">
+                  <Icon type="like" /> {post.voteScore}
+                </Tag>
               </Card>
             </Col>
           ))}
