@@ -50,7 +50,6 @@ class Index extends React.Component {
 
   render() {
     const { categories, posts, sortValue } = this.state;
-    console.log(posts)
     
     return (
       <PageTemplate

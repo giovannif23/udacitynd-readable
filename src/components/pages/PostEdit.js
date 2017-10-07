@@ -5,14 +5,25 @@ import { capitalize } from '../utils/helpers';
 import moment from 'moment';
 import PageTemplate from '../templates/PageTemplate';
 import Header from '../organisms/Header';
-import { Button, Form, Icon, Input, Tag, Row, Col } from 'antd';
+import { Button, Col, Form, Icon, Input, Tag, Row, Select } from 'antd';
 
 const FormItem = Form.Item;
+const Option = Select.Option;
+const { TextArea } = Input;
 
 class PostEdit extends React.Component {
   state = {
     post: {},
   };
+
+  setCategory = (value) => {
+    this.setState({
+      post: {
+        category: value
+      }
+    });
+  };
+
   componentDidMount() {
     const id = this.props.match.params.id;
 
@@ -26,19 +37,49 @@ class PostEdit extends React.Component {
 
   render() {
     const { post } = this.state;
+
     return (
       <PageTemplate
         header={<Header />}>
-        <h1>Edit Post</h1>
-        <br />
         <Row>
-          <Col span={12}>
-            <Form style={{ width: '100%' }} layout="inline" onSubmit={this.handleSubmit}>
+          <Col span={12} offset={6}>
+            <h1>Edit Post</h1>
+            
+            <br />
+
+            <Form style={{ width: '100%' }} layout="vertical" onSubmit={this.handleSubmit}>
               <FormItem label="Title">
                 <Input 
                   style={{ width: 500 }}
                   value={post.title} />
               </FormItem>
+
+              <FormItem label="Body">
+                <TextArea
+                  rows={4}
+                  style={{ width: 500 }}
+                  value={post.body} />
+              </FormItem>
+
+              <FormItem label="Author">
+                <Input
+                  style={{ width: 500 }}
+                  value={post.author} />
+              </FormItem>
+
+              <FormItem label="Category">
+                {post.category &&
+                  <Select 
+                    style={{ width: 500 }}
+                    defaultValue={post.category}>
+                    <Option value="react">React</Option>
+                    <Option value="redux">Redux</Option>
+                    <Option value="udacity">Udacity</Option>
+                  </Select>
+                }
+              </FormItem>
+
+              <Button type="primary" size="large">Save</Button>
             </Form>
           </Col>
         </Row>
