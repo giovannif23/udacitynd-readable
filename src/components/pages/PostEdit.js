@@ -50,27 +50,27 @@ class PostEdit extends React.Component {
             <Form style={{ width: '100%' }} layout="vertical" onSubmit={this.handleSubmit}>
               <FormItem label="Title">
                 <Input 
-                  style={{ width: 500 }}
+                  style={{ width: '100%' }}
                   value={post.title} />
               </FormItem>
 
               <FormItem label="Body">
                 <TextArea
                   rows={4}
-                  style={{ width: 500 }}
+                  style={{ width: '100%' }}
                   value={post.body} />
               </FormItem>
 
               <FormItem label="Author">
                 <Input
-                  style={{ width: 500 }}
+                  style={{ width: '100%' }}
                   value={post.author} />
               </FormItem>
 
               <FormItem label="Category">
                 {post.category &&
                   <Select 
-                    style={{ width: 500 }}
+                  style={{ width: '100%' }}
                     defaultValue={post.category}>
                     <Option value="react">React</Option>
                     <Option value="redux">Redux</Option>

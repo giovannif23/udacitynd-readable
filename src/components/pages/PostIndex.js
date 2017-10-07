@@ -5,13 +5,47 @@ import { capitalize } from '../utils/helpers';
 import moment from 'moment';
 import PageTemplate from '../templates/PageTemplate';
 import Header from '../organisms/Header';
-import { Avatar, Button, Card, Col, Icon, Tag, Row } from 'antd';
+import { 
+  Avatar, 
+  Button, 
+  Card, 
+  Col, 
+  Form,
+  Icon, 
+  Input,
+  Tag, 
+  Row, 
+  Popconfirm, 
+  message, 
+  Modal 
+} from 'antd';
+
+const FormItem = Form.Item;
+const { TextArea } = Input;
 
 class PostIndex extends React.Component {
   state = {
     comments: [],
     post: {},
+    commentModalVisible: false,
   };
+
+  setCommentModalVisible = (commentModalVisible) => {
+    this.setState({ 
+      commentModalVisible 
+    });
+  }
+
+  confirm = (e) => {
+    console.log(e);
+    message.success('Click on Yes');
+  }
+
+  cancel = (e) => {
+    console.log(e);
+    message.error('Click on No');
+  }
+
 
   sortByVoteScore = ((a, b) => {
     var a = a.voteScore;
@@ -60,9 +94,14 @@ class PostIndex extends React.Component {
               <Link style={{ marginRight: 15 }} to={`${post.id}/edit`}>
                 Edit
               </Link>
-              <Link to={`${post.id}/edit`}>
-                Delete
-              </Link>
+              <Popconfirm 
+                title="Are you sure delete this post?" 
+                onConfirm={this.confirm} 
+                onCancel={this.cancel} 
+                okText="Yes" 
+                cancelText="No">
+                <a href="#">Delete</a>
+              </Popconfirm>
             </div>
 
             <Row>
@@ -106,9 +145,14 @@ class PostIndex extends React.Component {
                   <Link style={{ marginRight: 15 }} to={`${comment.id}/edit`}>
                     Edit
                   </Link>
-                  <Link to={`${comment.id}/edit`}>
-                    Delete
-                  </Link>
+                  <Popconfirm
+                    title="Are you sure delete this comment?"
+                    onConfirm={this.confirm}
+                    onCancel={this.cancel}
+                    okText="Yes"
+                    cancelText="No">
+                    <a href="#">Delete</a>
+                  </Popconfirm>
                 </div>
               </Card>
             ))}
@@ -119,9 +163,34 @@ class PostIndex extends React.Component {
         
         <Row>
           <Col span={12} offset={6}>
-            <Button>Add Comment</Button>
+            <Button onClick={() => this.setCommentModalVisible(true)}>Add Comment</Button>
           </Col>
         </Row>
+
+        <Modal
+          title="Comment"
+          wrapClassName="vertical-center-modal"
+          visible={this.state.commentModalVisible}
+          onOk={() => this.setCommentModalVisible(false)}
+          onCancel={() => this.setCommentModalVisible(false)}
+          okText="Save"
+          cancelText="Cancel"
+        >
+          <Form style={{ width: '100%' }} layout="vertical" onSubmit={this.handleSubmit}>
+            <FormItem label="Title">
+              <Input
+                style={{ width: '100%' }}
+                value={post.title} />
+            </FormItem>
+
+            <FormItem label="Body">
+              <TextArea
+                rows={4}
+                style={{ width: '100%' }}
+                value={post.body} />
+            </FormItem>
+          </Form>
+        </Modal>
       </PageTemplate>
     );
   }
