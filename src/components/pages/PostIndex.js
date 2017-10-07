@@ -158,39 +158,33 @@ class PostIndex extends React.Component {
             ))}
           </Col>
         </Row>
-        
-        <br />
-        
+    
+        <hr style={{ borderTop: 'none', borderColor: '#dddddd',  marginBottom: 100, marginTop: 100}} />
+
         <Row>
           <Col span={12} offset={6}>
-            <Button onClick={() => this.setCommentModalVisible(true)}>Add Comment</Button>
+            <h2>Add a Comment</h2>
+
+            <br />
+
+            <Form style={{ width: '100%' }} layout="vertical" onSubmit={this.handleSubmit}>
+              <FormItem label="Title">
+                <Input
+                  style={{ width: '100%' }}
+                  value='' />
+              </FormItem>
+
+              <FormItem label="Body">
+                <TextArea
+                  rows={4}
+                  style={{ width: '100%' }}
+                  value='' />
+              </FormItem>
+
+              <Button>Add Comment</Button>
+            </Form>
           </Col>
         </Row>
-
-        <Modal
-          title="Comment"
-          wrapClassName="vertical-center-modal"
-          visible={this.state.commentModalVisible}
-          onOk={() => this.setCommentModalVisible(false)}
-          onCancel={() => this.setCommentModalVisible(false)}
-          okText="Save"
-          cancelText="Cancel"
-        >
-          <Form style={{ width: '100%' }} layout="vertical" onSubmit={this.handleSubmit}>
-            <FormItem label="Title">
-              <Input
-                style={{ width: '100%' }}
-                value={post.title} />
-            </FormItem>
-
-            <FormItem label="Body">
-              <TextArea
-                rows={4}
-                style={{ width: '100%' }}
-                value={post.body} />
-            </FormItem>
-          </Form>
-        </Modal>
       </PageTemplate>
     );
   }
