@@ -3,11 +3,12 @@ import { Route } from 'react-router-dom';
 import './App.css';
 
 // pages
-import Index from './components/pages/Index'
-import PostsByCategory from './components/pages/PostsByCategory'
-import PostIndex from './components/pages/PostIndex'
-import PostCreate from './components/pages/PostCreate'
-import PostEdit from './components/pages/PostEdit'
+import Index from './components/pages/Index';
+import PostsByCategory from './components/pages/PostsByCategory';
+import PostIndex from './components/pages/PostIndex';
+import PostCreate from './components/pages/PostCreate';
+import PostEdit from './components/pages/PostEdit';
+import CommentEdit from './components/pages/CommentEdit';
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
       <Route exact path="/post" component={PostCreate} />
       <Route exact path="/post/:id/edit" component={PostEdit} />
       <Route exact path="/post/:id" component={PostIndex} />
+      <Route exact path="/comment/:id" component={CommentEdit} />
     </div>
   );
 }

@@ -11,10 +11,9 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 const { TextArea } = Input;
 
-class PostEdit extends React.Component {
+class CommentEdit extends React.Component {
   state = {
     id: '',
-    title: '',
     body: '',
   };
 
@@ -29,12 +28,12 @@ class PostEdit extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault();
     const { id } = this.state;
-    const post = this.state;
-    console.log(post)
+    const comment = this.state;
+    comment.timestamp = Date.now();
 
-    API.editPost(id, post)
-      .then(() => {
-        message.success('Post was updated');
+    API.editComment(id, comment)
+      .then((res) => {
+        message.success('Comment was updated');
       })
       .then(() => {
         this.props.history.goBack();
@@ -53,11 +52,10 @@ class PostEdit extends React.Component {
   componentDidMount() {
     const id = this.props.match.params.id;
 
-    API.getPost(id)
+    API.getComment(id)
       .then((res) => {
         this.setState({
           id: res.id,
-          title: res.title,
           body: res.body,
         });
       });
@@ -70,19 +68,11 @@ class PostEdit extends React.Component {
         header={<Header />}>
         <Row>
           <Col span={12} offset={6}>
-            <h1>Edit Post</h1>
-            
+            <h1>Edit Comment</h1>
+
             <br />
 
             <Form style={{ width: '100%' }} layout="vertical" onSubmit={this.handleSubmit}>
-              <FormItem label="Title">
-                <Input 
-                  name="title"
-                  style={{ width: '100%' }}
-                  value={this.state.title}
-                  onChange={this.handleInputChange} />
-              </FormItem>
-
               <FormItem label="Body">
                 <TextArea
                   name="body"
@@ -101,4 +91,4 @@ class PostEdit extends React.Component {
   }
 }
 
-export default PostEdit;
+export default CommentEdit;

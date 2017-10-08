@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import * as API from '../utils/api';
-import { capitalize } from '../utils/helpers';
+import { capitalize, uuidv4 } from '../utils/helpers';
 import moment from 'moment';
 import PageTemplate from '../templates/PageTemplate';
 import Header from '../organisms/Header';
@@ -27,14 +27,34 @@ class PostIndex extends React.Component {
   state = {
     comments: [],
     post: {},
-    commentModalVisible: false,
+    author: '', 
+    body: '',
   };
 
-  setCommentModalVisible = (commentModalVisible) => {
-    this.setState({ 
-      commentModalVisible 
-    });
+  handleSubmit = (e) => {
+    e.preventDefault();
+    const { post } = this.state;
+    const comment = {
+      id: uuidv4(),
+      parentId: post.id,
+      author: this.state.author,
+      body: this.state.body,
+      timestamp: Date.now(),
+    };
+    console.log(post)
+    API.createComment(comment)
+      .then((res) => {
+      });
   }
+
+  handleInputChange = (e) => {
+    const target = e.target;
+    const value = target.value;
+    const name = target.name;
+    this.setState({
+      [name]: value
+    });
+  };
 
   confirm = (e) => {
     console.log(e);
@@ -131,7 +151,7 @@ class PostIndex extends React.Component {
             <br />
 
             {comments.sort(this.sortByVoteScore).map((comment, index) => (
-              <Card key={index}>
+              <Card key={index} style={{ marginBottom: 20 }}>
                 <Avatar icon="user" />
                 <h3>{comment.author}</h3>
                 <p>{comment.body}</p>
@@ -142,7 +162,7 @@ class PostIndex extends React.Component {
                   <Icon type="like-o" /> {comment.voteScore}
                 </Tag>
                 <div style={{ position: 'absolute', top: 20, right: 20 }}>
-                  <Link style={{ marginRight: 15 }} to={`${comment.id}/edit`}>
+                  <Link style={{ marginRight: 15 }} to={`../comment/${comment.id}`}>
                     Edit
                   </Link>
                   <Popconfirm
@@ -168,20 +188,24 @@ class PostIndex extends React.Component {
             <br />
 
             <Form style={{ width: '100%' }} layout="vertical" onSubmit={this.handleSubmit}>
-              <FormItem label="Title">
+              <FormItem label="Author">
                 <Input
+                  name="author"
                   style={{ width: '100%' }}
-                  value='' />
+                  value={this.state.author}
+                  onChange={this.handleInputChange}  />
               </FormItem>
 
               <FormItem label="Body">
                 <TextArea
+                  name="body"
                   rows={4}
                   style={{ width: '100%' }}
-                  value='' />
+                  value={this.state.body}
+                  onChange={this.handleInputChange}  />
               </FormItem>
 
-              <Button>Add Comment</Button>
+              <Button htmlType="submit" type="primary" size="large">Add Comment</Button>
             </Form>
           </Col>
         </Row>

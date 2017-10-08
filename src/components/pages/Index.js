@@ -55,7 +55,7 @@ class Index extends React.Component {
       <PageTemplate
         header={<Header/>}>
         <Row style={{marginBottom: 50}}>
-          <Col span={12}>
+          <Col span={12} offset={6}>
             <span style={{ marginRight: 5 }}>Sort By:</span> 
             <Select onChange={this.sortPosts} style={{ marginRight: 10, width: 100 }} size="small" defaultValue={sortValue}>
               <Option value="title">Title</Option>
@@ -72,9 +72,13 @@ class Index extends React.Component {
         </Row>
 
         <Row gutter={30}>
-          {posts.map((post, index) => (
-            <Col className="gutter-row" span={8} key={index}>
-              <Card title={<Link to={`post/${post.id}`}>{post.title}</Link>} extra={<Link to={`post/${post.id}/edit`}><Icon style={{ fontSize: 18 }} type="setting" /></Link>} style={{ width: '100%'}}>
+          <Col span={12} offset={6}>
+            {posts.map((post, index) => (
+              <Card 
+                key={index} 
+                title={<Link to={`post/${post.id}`}>{post.title}</Link>} 
+                extra={<Link to={`post/${post.id}/edit`}> <Icon style={{ fontSize: 18 }} type="setting" /></Link>} 
+                style={{ marginBottom: 20, width: '100%'}}>
                 <p>{post.body}</p>
                 <br />
                 <Link key={index} to={`/${post.category}/posts`}>
@@ -86,8 +90,8 @@ class Index extends React.Component {
                   <Icon type="like-o" /> {post.voteScore}
                 </Tag>
               </Card>
-            </Col>
-          ))}
+            ))}
+          </Col>
         </Row>
       </PageTemplate>
     );
