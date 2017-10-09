@@ -1,6 +1,8 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import * as API from '../utils/api';
+import { getPost } from '../../actions';
 import { capitalize } from '../utils/helpers';
 import moment from 'moment';
 import PageTemplate from '../templates/PageTemplate';
@@ -52,19 +54,25 @@ class PostEdit extends React.Component {
 
   componentDidMount() {
     const id = this.props.match.params.id;
+    this.props.get(id);
+    // API.getPost(id)
+    //   .then((res) => {
+    //     this.setState({
+    //       id: res.id,
+    //       title: res.title,
+    //       body: res.body,
+    //     });
+    //   });
+  }
 
-    API.getPost(id)
-      .then((res) => {
-        this.setState({
-          id: res.id,
-          title: res.title,
-          body: res.body,
-        });
-      });
+  componentDidUpdate(prevProps) {
+    if (this.props.post !== prevProps.post) {
+      // Do something
+    }
   }
 
   render() {
-
+    const { post } = this.props;
     return (
       <PageTemplate
         header={<Header />}>
@@ -79,7 +87,7 @@ class PostEdit extends React.Component {
                 <Input 
                   name="title"
                   style={{ width: '100%' }}
-                  value={this.state.title}
+                  value={post.title}
                   onChange={this.handleInputChange} />
               </FormItem>
 
@@ -88,7 +96,7 @@ class PostEdit extends React.Component {
                   name="body"
                   rows={4}
                   style={{ width: '100%' }}
-                  value={this.state.body}
+                  value={post.body}
                   onChange={this.handleInputChange} />
               </FormItem>
 
@@ -101,4 +109,17 @@ class PostEdit extends React.Component {
   }
 }
 
-export default PostEdit;
+function mapStateToProps({post}) {
+  console.log('mapStateToProps',post)
+  return {
+    post
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    get: (data) => dispatch(getPost(data)),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PostEdit);

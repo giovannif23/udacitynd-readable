@@ -1,6 +1,8 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
 import * as API from '../utils/api';
+import { addPost } from '../../actions';
 import { uuidv4 } from '../utils/helpers';
 import PageTemplate from '../templates/PageTemplate';
 import Header from '../organisms/Header';
@@ -20,14 +22,15 @@ class PostCreate extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
+    
     const post = this.state;
-    post.timestamp = Date.now();
     post.id = uuidv4();
+    this.props.add(post);
 
-    API.createPost(post)
-      .then((res) => {
-        this.props.history.goBack();
-      });
+    // API.createPost(post)
+    //   .then((res) => {
+    //     this.props.history.goBack();
+    //   });
   }
 
   handleInputChange = (e) =>  {
@@ -44,7 +47,6 @@ class PostCreate extends React.Component {
   }
 
   render() {
-
     return (
       <PageTemplate
         header={<Header/>}>
@@ -99,4 +101,17 @@ class PostCreate extends React.Component {
   }
 }
 
-export default PostCreate;
+function mapStateToProps(post) {
+  console.log('mapStateToProps', this.state);
+  return {
+    post
+  }
+}
+
+function mapDispatchToProps (dispatch) {
+  return {
+    add: (data) => dispatch(addPost(data)),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PostCreate);

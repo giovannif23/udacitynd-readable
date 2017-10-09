@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import * as API from '../utils/api';
 import { capitalize } from '../utils/helpers';
@@ -98,4 +99,4 @@ class Index extends React.Component {
   }
 }
 
-export default Index;
+export default connect()(Index);
