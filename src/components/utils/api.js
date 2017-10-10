@@ -39,7 +39,7 @@ export const createPost = (post) =>
     })
     .then(res => res.json());
 
-export const editPost = (id, post) => 
+export const updatePost = (id, post) => 
   fetch(`${api}/posts/${id}`, { 
       headers, 
       method: 'PUT',

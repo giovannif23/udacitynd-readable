@@ -3,6 +3,8 @@ import { combineReducers } from 'redux';
 import {
   ADD_POST,
   ADD_POST_SUCCESS,
+  UPDATE_POST,
+  UPDATE_POST_SUCCESS,
   ADD_COMMENT,
   REQUEST_POST,
   RECEIVE_POST,
@@ -20,9 +22,10 @@ const initialState = {
 }
 
 function post (state = initialState.post, action) {
+  const { post } = action;
+
   switch (action.type) {
     case ADD_POST :
-      const { post } = action;
       return {
         ...state,
         id: post.id,
@@ -36,15 +39,25 @@ function post (state = initialState.post, action) {
     case ADD_POST_SUCCESS :
       return Object.assign({}, state)
     
+    case UPDATE_POST :
+      return {
+        ...state,
+        title: post.title,
+        body: post.body,
+      }
+
+    case UPDATE_POST_SUCCESS :
+      return Object.assign({}, state)
+    
     case REQUEST_POST :
       return Object.assign({}, state)
     
     case RECEIVE_POST :
       return {
         ...state,
-        id: action.post.id,
-        title: action.post.title,
-        body: action.post.body,
+        id: post.id,
+        title: post.title,
+        body: post.body,
       }
     
     default :

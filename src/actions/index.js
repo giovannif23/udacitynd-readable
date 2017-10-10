@@ -2,6 +2,8 @@ import * as API from '../components/utils/api';
 
 export const ADD_POST = 'ADD_POST';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
+export const UPDATE_POST = 'UPDATE_POST';
+export const UPDATE_POST_SUCCESS = 'UPDATE_POST_SUCCESS';
 export const REQUEST_POST = 'REQUEST_POST';
 export const RECEIVE_POST = 'RECEIVE_POST';
 
@@ -17,6 +19,20 @@ export function addPost (post) {
 export function addPostSuccess (json) {
   return {
     type: ADD_POST_SUCCESS,
+    post: json,
+  }
+}
+
+export function updatePost (id, post) {
+  return dispatch => {
+    return API.updatePost(id, post)
+      .then(json => dispatch(updatePostSuccess(json)));
+  }
+}
+
+export function updatePostSuccess (json) {
+  return {
+    type: UPDATE_POST_SUCCESS,
     post: json,
   }
 }

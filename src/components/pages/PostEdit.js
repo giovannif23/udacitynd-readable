@@ -1,8 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import * as API from '../utils/api';
-import { getPost } from '../../actions';
+import { getPost, updatePost } from '../../actions';
 import { capitalize } from '../utils/helpers';
 import moment from 'moment';
 import PageTemplate from '../templates/PageTemplate';
@@ -33,13 +32,20 @@ class PostEdit extends React.Component {
     const { id } = this.state;
     const post = this.state;
 
-    API.editPost(id, post)
+    this.props.update(id, post)
       .then(() => {
         message.success('Post was updated');
       })
       .then(() => {
         this.props.history.goBack();
       });
+    // API.editPost(id, post)
+    //   .then(() => {
+    //     message.success('Post was updated');
+    //   })
+    //   .then(() => {
+    //     this.props.history.goBack();
+    //   });
   };
 
   handleInputChange = (e) => {
@@ -118,6 +124,7 @@ function mapStateToProps({post}) {
 function mapDispatchToProps(dispatch) {
   return {
     get: (data) => dispatch(getPost(data)),
+    update: (id, data) => dispatch(updatePost(id, data)),
   }
 }
 
