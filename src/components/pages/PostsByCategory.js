@@ -29,14 +29,17 @@ class PostsByCategory extends React.Component {
       <PageTemplate
         header={<Header/>}>
         <Row>
-          <Col span={24} style={{ marginBottom: 20 }}>
+          <Col span={12} offset={6}>
             <Link to="/">
               <Icon type="arrow-left" />Back to Home
             </Link>
           </Col>
+
+          <br />
+          <br />
           
           {!posts.length && 
-            <Col span={24}>
+            <Col span={12} offset={6}>
               <Alert 
                 message="Shucks..." 
                 description="There are no posts with the category" 
@@ -44,16 +47,19 @@ class PostsByCategory extends React.Component {
               />
             </Col>
           }
+          <Col span={12} offset={6}>
           {posts.map((post, index) => (
-            <Col className="gutter-row" span={6} key={index}>
-              <Card title={post.title} style={{ width: 300 }}>
+              <Card title={post.title} style={{ marginBottom: 20, width: '100%' }} key={index}>
                 <p>{post.body}</p>
-                <a href="#"><Tag color="blue">
+                
+                <br />
+                
+                <Tag>
                   <Icon type="tag" /> {capitalize(post.category)}
-                </Tag></a>
+                </Tag>
               </Card>
-            </Col>
-          ))}
+            ))}
+          </Col>
         </Row>
       </PageTemplate>
     );

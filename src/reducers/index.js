@@ -5,9 +5,10 @@ import {
   ADD_POST_SUCCESS,
   UPDATE_POST,
   UPDATE_POST_SUCCESS,
-  ADD_COMMENT,
   REQUEST_POST,
   RECEIVE_POST,
+  ADD_COMMENT,
+  RECEIVE_POST_COMMENTS,
 } from '../actions';
 
 const initialState = {
@@ -34,10 +35,10 @@ function post (state = initialState.post, action) {
         body: post.body,
         author: post.author,
         category: post.category,
-      }
+      };
     
     case ADD_POST_SUCCESS :
-      return Object.assign({}, state)
+      return Object.assign({}, state, post);
     
     case UPDATE_POST :
       return {
@@ -47,10 +48,10 @@ function post (state = initialState.post, action) {
       }
 
     case UPDATE_POST_SUCCESS :
-      return Object.assign({}, state)
+      return Object.assign({}, state, post);
     
     case REQUEST_POST :
-      return Object.assign({}, state)
+      return Object.assign({}, state, post);
     
     case RECEIVE_POST :
       return {
@@ -58,28 +59,36 @@ function post (state = initialState.post, action) {
         id: post.id,
         title: post.title,
         body: post.body,
-      }
+      };
     
     default :
       return state;
   }
 }
 
-function comment (state = {}, action) {
+function comments (state = [], action) {
+
   switch (action.type) {
-    case ADD_COMMENT :
-      const { comment } = action;
-      return {
-        ...state,
+    case ADD_COMMENT:
+      console.log('action', action)
+      // const comment = {
+      //   id: action.comment.id,
+      //   parentId: action.comment.parentId,
+      //   author: action.comment.author,
+      //   body: action.comment.body,
+      //   timestamp: Date.now(),
+      // }
+      return Object.assign({}, state, action.comment);
 
-      }
-
-    default :
+    case RECEIVE_POST_COMMENTS :
+      return Object.assign({}, state, action.comments);
+      
+    default:
       return state;
   }
 }
 
 export default combineReducers({
   post,
-  comment,
+  comments,
 });

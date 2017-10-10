@@ -5,8 +5,9 @@ import * as API from '../utils/api';
 import { capitalize } from '../utils/helpers';
 import PageTemplate from '../templates/PageTemplate';
 import Header from '../organisms/Header';
-import { Card, Icon, Input, Select, Tag, Row, Col } from 'antd';
+import { Button, Card, Icon, Input, Select, Tag, Row, Col } from 'antd';
 
+const ButtonGroup = Button.Group;
 const Option = Select.Option;
 
 class Index extends React.Component {
@@ -17,9 +18,9 @@ class Index extends React.Component {
   };
 
   sortPosts = (value) => {
-    const sortedPosts = this.state.posts.sort((a, b) => {
-      var a = a[value];
-      var b = b[value];
+    const sortedPosts = this.state.posts.sort((prev, next) => {
+      var a = prev[value];
+      var b = next[value];
       if (a < b) {
         return -1;
       }
@@ -83,13 +84,18 @@ class Index extends React.Component {
                 <p>{post.body}</p>
                 <br />
                 <Link key={index} to={`/${post.category}/posts`}>
-                  <Tag color="blue">
+                  <Tag>
                     <Icon type="tag-o" /> {capitalize(post.category)}
                   </Tag>
                 </Link>
-                <Tag color="blue">
-                  <Icon type="like-o" /> {post.voteScore}
+                <Tag>
+                  Score {post.voteScore}
                 </Tag>
+
+                <ButtonGroup>
+                  <Button size="small" icon="like-o" />
+                  <Button size="small" icon="dislike-o" />
+                </ButtonGroup>
               </Card>
             ))}
           </Col>

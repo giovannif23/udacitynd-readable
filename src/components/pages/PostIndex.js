@@ -1,6 +1,8 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import * as API from '../utils/api';
+import { dispatchAddComment, getPostComments } from '../../actions';
 import { capitalize, uuidv4 } from '../utils/helpers';
 import moment from 'moment';
 import PageTemplate from '../templates/PageTemplate';
@@ -16,10 +18,10 @@ import {
   Tag, 
   Row, 
   Popconfirm, 
-  message, 
-  Modal 
+  message,
 } from 'antd';
 
+const ButtonGroup = Button.Group;
 const FormItem = Form.Item;
 const { TextArea } = Input;
 
@@ -41,10 +43,11 @@ class PostIndex extends React.Component {
       body: this.state.body,
       timestamp: Date.now(),
     };
-    console.log(post)
-    API.createComment(comment)
-      .then((res) => {
-      });
+    this.props.addComment(comment);
+
+    // API.createComment(comment)
+    //   .then((res) => {
+    //   });
   }
 
   handleInputChange = (e) => {
@@ -89,11 +92,10 @@ class PostIndex extends React.Component {
         });
       })
       .then(() => {
-        API.getPostComments(this.state.post.id)
+        this.props.getComments(id)
           .then((res) => {
-            console.log(res)
             this.setState({
-              comments: res,
+              comments: res.comments,
             });
           })
       });
@@ -126,15 +128,21 @@ class PostIndex extends React.Component {
 
             <Row>
               <Col>
-                <Tag color="blue">
+                <Tag>
                   <Icon type="user" /> {post.author}
                 </Tag>
-                <Tag color="blue">
-                  <Icon type="like-o" /> {post.voteScore}
-                </Tag>
-                <Tag color="blue">
+                <Tag>
                   <Icon type="calendar" /> {date}
                 </Tag>
+
+                <Tag>
+                  Score {post.voteScore}
+                </Tag>
+
+                <ButtonGroup>
+                  <Button size="small" icon="like-o" />
+                  <Button size="small" icon="dislike-o" />
+                </ButtonGroup>
               </Col>
             </Row>
           </Col>
@@ -158,9 +166,15 @@ class PostIndex extends React.Component {
 
                 <br />
 
-                <Tag color="blue">
-                  <Icon type="like-o" /> {comment.voteScore}
+                <Tag>
+                  Score {comment.voteScore}
                 </Tag>
+
+                <ButtonGroup>
+                  <Button size="small" icon="like-o" />
+                  <Button size="small" icon="dislike-o" />
+                </ButtonGroup>
+
                 <div style={{ position: 'absolute', top: 20, right: 20 }}>
                   <Link style={{ marginRight: 15 }} to={`../comment/${comment.id}`}>
                     Edit
@@ -214,4 +228,17 @@ class PostIndex extends React.Component {
   }
 }
 
-export default PostIndex;
+function mapStateToProps({ comments }) {
+  return {
+    comments
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    getComments: (data) => dispatch(getPostComments(data)),
+    addComment: (data) => dispatch(dispatchAddComment(data)),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PostIndex);

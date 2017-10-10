@@ -8,6 +8,7 @@ export const REQUEST_POST = 'REQUEST_POST';
 export const RECEIVE_POST = 'RECEIVE_POST';
 
 export const ADD_COMMENT = 'ADD_COMMENT';
+export const RECEIVE_POST_COMMENTS = 'RECEIVE_POST_COMMENTS';
 
 export function addPost (post) {
   return dispatch => {
@@ -59,9 +60,30 @@ export function getPost (id) {
   }
 }
 
-export function addComment ({ author, comment }) {
+export function dispatchAddComment (comment) {
+  return dispatch => {
+    return API.createComment(comment)
+      .then(json => dispatch (addComment(json)))
+  }
+}
+
+export function addComment (json) {
   return {
     type: ADD_COMMENT,
-    comment, 
+    comment: json, 
+  }
+}
+
+export function getPostComments (id) {
+  return dispatch => {
+    return API.getPostComments(id)
+      .then(json => dispatch(receivePostComments(json)));
+  }
+}
+
+export function receivePostComments (json) {
+  return {
+    type: RECEIVE_POST_COMMENTS,
+    comments: json,
   }
 }
