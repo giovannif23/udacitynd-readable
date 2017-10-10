@@ -39,13 +39,6 @@ class PostEdit extends React.Component {
       .then(() => {
         this.props.history.goBack();
       });
-    // API.editPost(id, post)
-    //   .then(() => {
-    //     message.success('Post was updated');
-    //   })
-    //   .then(() => {
-    //     this.props.history.goBack();
-    //   });
   };
 
   handleInputChange = (e) => {
