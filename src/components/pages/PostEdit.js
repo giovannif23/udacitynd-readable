@@ -32,7 +32,6 @@ class PostEdit extends React.Component {
     e.preventDefault();
     const { id } = this.state;
     const post = this.state;
-    console.log(post)
 
     API.editPost(id, post)
       .then(() => {
@@ -54,15 +53,17 @@ class PostEdit extends React.Component {
 
   componentDidMount() {
     const id = this.props.match.params.id;
-    this.props.get(id);
-    // API.getPost(id)
-    //   .then((res) => {
-    //     this.setState({
-    //       id: res.id,
-    //       title: res.title,
-    //       body: res.body,
-    //     });
-    //   });
+
+    // Get post
+    this.props.get(id)
+      .then((res) => {
+        const { post } = res;
+        this.setState({
+          id: post.id,
+          title: post.title,
+          body: post.body,
+        });
+      });
   }
 
   componentDidUpdate(prevProps) {
@@ -72,7 +73,6 @@ class PostEdit extends React.Component {
   }
 
   render() {
-    const { post } = this.props;
     return (
       <PageTemplate
         header={<Header />}>
@@ -83,21 +83,21 @@ class PostEdit extends React.Component {
             <br />
 
             <Form style={{ width: '100%' }} layout="vertical" onSubmit={this.handleSubmit}>
-              <FormItem label="Title">
-                <Input 
-                  name="title"
-                  style={{ width: '100%' }}
-                  value={post.title}
-                  onChange={this.handleInputChange} />
-              </FormItem>
+                <FormItem label="Title">
+                  <Input 
+                    name="title"
+                    style={{ width: '100%' }}
+                    value={this.state.title}
+                    onChange={this.handleInputChange} />
+                </FormItem>
 
               <FormItem label="Body">
-                <TextArea
-                  name="body"
-                  rows={4}
-                  style={{ width: '100%' }}
-                  value={post.body}
-                  onChange={this.handleInputChange} />
+                  <TextArea
+                    name="body"
+                    rows={4}
+                    style={{ width: '100%' }}
+                    value={this.state.body}
+                    onChange={this.handleInputChange} />
               </FormItem>
 
               <Button htmlType="submit" type="primary" size="large">Save</Button>
@@ -110,7 +110,6 @@ class PostEdit extends React.Component {
 }
 
 function mapStateToProps({post}) {
-  console.log('mapStateToProps',post)
   return {
     post
   }

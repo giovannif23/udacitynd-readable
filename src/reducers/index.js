@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 
 import {
   ADD_POST,
+  ADD_POST_SUCCESS,
   ADD_COMMENT,
   REQUEST_POST,
   RECEIVE_POST,
@@ -31,6 +32,9 @@ function post (state = initialState.post, action) {
         author: post.author,
         category: post.category,
       }
+    
+    case ADD_POST_SUCCESS :
+      return Object.assign({}, state)
     
     case REQUEST_POST :
       return Object.assign({}, state)

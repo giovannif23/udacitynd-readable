@@ -6,7 +6,7 @@ import { addPost } from '../../actions';
 import { uuidv4 } from '../utils/helpers';
 import PageTemplate from '../templates/PageTemplate';
 import Header from '../organisms/Header';
-import { Button, Col, Form, Icon, Input, Tag, Row, Select } from 'antd';
+import { Button, Col, Form, Icon, Input, message, Tag, Row, Select } from 'antd';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -25,12 +25,13 @@ class PostCreate extends React.Component {
     
     const post = this.state;
     post.id = uuidv4();
-    this.props.add(post);
-
-    // API.createPost(post)
-    //   .then((res) => {
-    //     this.props.history.goBack();
-    //   });
+    this.props.add(post)
+      .then(() => {
+        message.success('Post was created');
+      })
+      .then(() => {
+        this.props.history.goBack();
+      });
   }
 
   handleInputChange = (e) =>  {
@@ -101,8 +102,7 @@ class PostCreate extends React.Component {
   }
 }
 
-function mapStateToProps(post) {
-  console.log('mapStateToProps', this.state);
+function mapStateToProps ({ post }) {
   return {
     post
   }

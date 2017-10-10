@@ -1,18 +1,27 @@
 import * as API from '../components/utils/api';
 
 export const ADD_POST = 'ADD_POST';
-export const ADD_COMMENT = 'ADD_COMMENT';
+export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
 export const REQUEST_POST = 'REQUEST_POST';
 export const RECEIVE_POST = 'RECEIVE_POST';
 
+export const ADD_COMMENT = 'ADD_COMMENT';
+
 export function addPost (post) {
-  return {
-    type: ADD_POST,
-    post,
+  return dispatch => {
+    return API.createPost(post)
+      .then(json => dispatch(addPostSuccess(json)));
   }
 }
 
-export function requestPost (id) {
+export function addPostSuccess (json) {
+  return {
+    type: ADD_POST_SUCCESS,
+    post: json,
+  }
+}
+
+export  function requestPost (id) {
   return {
     type: REQUEST_POST,
     id,
