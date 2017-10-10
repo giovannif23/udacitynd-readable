@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import * as API from '../utils/api';
-import { dispatchAddComment, getPostComments } from '../../actions';
+import { dispatchAddComment, deleteComment, getPostComments } from '../../actions';
 import { capitalize, uuidv4 } from '../utils/helpers';
 import moment from 'moment';
 import PageTemplate from '../templates/PageTemplate';
@@ -43,7 +43,7 @@ class PostIndex extends React.Component {
       body: this.state.body,
       timestamp: Date.now(),
     };
-    
+
     this.props.addComment(comment);
   }
 
@@ -56,14 +56,20 @@ class PostIndex extends React.Component {
     });
   };
 
-  confirm = (e) => {
-    console.log(e);
-    message.success('Click on Yes');
+  confirm = (id) => {
+    console.log(id);
+    this.props.deleteComment()
+      .then(() => message.success('Comment has been deleted'));
+  }
+
+  confirmDeleteComment = (id) => {
+    const parentId = this.props.match.params.id;
+    this.props.deleteComment(id, parentId)
+      .then(() => message.success('Comment has been deleted'));
   }
 
   cancel = (e) => {
     console.log(e);
-    message.error('Click on No');
   }
 
 
@@ -188,7 +194,7 @@ class PostIndex extends React.Component {
                   </Link>
                   <Popconfirm
                     title="Are you sure delete this comment?"
-                    onConfirm={this.confirm}
+                    onConfirm={() => this.confirmDeleteComment(comment.id, comment.ParentId)}
                     onCancel={this.cancel}
                     okText="Yes"
                     cancelText="No">
@@ -243,8 +249,9 @@ function mapStateToProps({ comments }) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    getComments: (data) => dispatch(getPostComments(data)),
     addComment: (data) => dispatch(dispatchAddComment(data)),
+    deleteComment: (data) => dispatch(deleteComment(data)),
+    getComments: (data) => dispatch(getPostComments(data)),
   }
 }
 

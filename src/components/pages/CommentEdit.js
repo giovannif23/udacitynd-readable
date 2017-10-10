@@ -1,6 +1,8 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import * as API from '../utils/api';
+import { getComment, updateComment } from '../../actions';
 import { capitalize } from '../utils/helpers';
 import moment from 'moment';
 import PageTemplate from '../templates/PageTemplate';
@@ -30,8 +32,8 @@ class CommentEdit extends React.Component {
     const { id } = this.state;
     const comment = this.state;
     comment.timestamp = Date.now();
-
-    API.editComment(id, comment)
+    
+    this.props.update(id, comment)
       .then((res) => {
         message.success('Comment was updated');
       })
@@ -52,11 +54,12 @@ class CommentEdit extends React.Component {
   componentDidMount() {
     const id = this.props.match.params.id;
 
-    API.getComment(id)
+    this.props.get(id)
       .then((res) => {
+        const { comment } = res;
         this.setState({
-          id: res.id,
-          body: res.body,
+          id: comment.id,
+          body: comment.body,
         });
       });
   }
@@ -91,4 +94,17 @@ class CommentEdit extends React.Component {
   }
 }
 
-export default CommentEdit;
+function mapStateToProps({ comment }) {
+  return {
+    comment
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    get: (data) => dispatch(getComment(data)),
+    update: (id, data) => dispatch(updateComment(id, data)),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CommentEdit);

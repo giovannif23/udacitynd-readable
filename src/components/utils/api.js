@@ -59,10 +59,16 @@ export const createComment = (comment) =>
     })
     .then(res => res.json());
 
-export const editComment = (id, comment) =>
+export const updateComment = (id, comment) =>
   fetch(`${api}/comments/${id}`, {
       headers,
       method: 'PUT',
       body: JSON.stringify(comment),
     })
     .then(res => res.json());
+
+export const deleteComment = (id) =>
+  fetch(`${api}/comments/${id}`, {
+      headers,
+      method: 'DELETE',
+    });

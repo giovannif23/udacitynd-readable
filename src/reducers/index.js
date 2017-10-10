@@ -8,6 +8,8 @@ import {
   REQUEST_POST,
   RECEIVE_POST,
   ADD_COMMENT,
+  UPDATE_COMMENT,
+  COMMENT_REMOVED,
   RECEIVE_POST_COMMENTS,
 } from '../actions';
 
@@ -27,15 +29,10 @@ function post (state = initialState.post, action) {
 
   switch (action.type) {
     case ADD_POST :
-      return {
-        ...state,
-        id: post.id,
-        timestamp: Date.now(),
-        title: post.title,
-        body: post.body,
-        author: post.author,
-        category: post.category,
-      };
+     const post = {
+       action
+     }
+      return [...state, action.post];
     
     case ADD_POST_SUCCESS :
       return Object.assign({}, state, post);
@@ -67,10 +64,15 @@ function post (state = initialState.post, action) {
 }
 
 function comments (state = [], action) {
-  console.log('comments', action)
   switch (action.type) {
     case ADD_COMMENT:
       return [...state, action.comment];
+    
+    case UPDATE_COMMENT:
+      return [...state, action.comment];
+    
+    case COMMENT_REMOVED:
+      return state.filter(comment => comment.id !== action.commentId);
 
     case RECEIVE_POST_COMMENTS :
       return Object.assign([{}], state, action.comments);
