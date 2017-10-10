@@ -67,21 +67,13 @@ function post (state = initialState.post, action) {
 }
 
 function comments (state = [], action) {
-
+  console.log('comments', action)
   switch (action.type) {
     case ADD_COMMENT:
-      console.log('action', action)
-      // const comment = {
-      //   id: action.comment.id,
-      //   parentId: action.comment.parentId,
-      //   author: action.comment.author,
-      //   body: action.comment.body,
-      //   timestamp: Date.now(),
-      // }
-      return Object.assign({}, state, action.comment);
+      return [...state, action.comment];
 
     case RECEIVE_POST_COMMENTS :
-      return Object.assign({}, state, action.comments);
+      return Object.assign([{}], state, action.comments);
       
     default:
       return state;

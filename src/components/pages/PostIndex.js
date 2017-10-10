@@ -43,11 +43,8 @@ class PostIndex extends React.Component {
       body: this.state.body,
       timestamp: Date.now(),
     };
+    
     this.props.addComment(comment);
-
-    // API.createComment(comment)
-    //   .then((res) => {
-    //   });
   }
 
   handleInputChange = (e) => {
@@ -99,6 +96,16 @@ class PostIndex extends React.Component {
             });
           })
       });
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.comments !== prevProps.comments) {
+      this.setState({
+        comments: this.props.comments,
+        author: '',
+        body: '',
+      });
+    }
   }
 
   render() {
