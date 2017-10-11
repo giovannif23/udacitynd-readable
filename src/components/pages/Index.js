@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import * as API from '../utils/api';
-import { getPosts, voteForPost } from '../../actions';
+import { getPosts, voteForPost, voteForPostOnCard } from '../../actions';
 import { capitalize } from '../utils/helpers';
 import PageTemplate from '../templates/PageTemplate';
 import Header from '../organisms/Header';
@@ -24,10 +24,11 @@ class Index extends React.Component {
 
     this.props.vote(id, voteOption)
       .then((res) => {
-        const { post } = res;
-        const { posts } = this.state.posts;
+        const { posts } = res;
         message.success(vote);
-        this.setState(Object.assign([{}], ...this.state.posts, post))
+        this.setState({
+          posts 
+        })
       });
   }
 
@@ -122,7 +123,7 @@ function mapStateToProps(posts) {
 function mapDispatchToProps(dispatch) {
   return {
     get: () => dispatch(getPosts()),
-    vote: (id, data) => dispatch(voteForPost(id, data)),
+    vote: (id, data) => dispatch(voteForPostOnCard(id, data)),
   }
 }
 

@@ -14,6 +14,7 @@ import { capitalize, uuidv4 } from '../utils/helpers';
 import moment from 'moment';
 import PageTemplate from '../templates/PageTemplate';
 import Header from '../organisms/Header';
+import { sortBy } from 'lodash';
 import { 
   Avatar, 
   Button, 
@@ -93,30 +94,17 @@ class PostIndex extends React.Component {
     console.log('vote', vote)
     this.props.voteComment(id, voteOption)
       .then((res) => {
-        const { comment } = res;
-        console.log('comment', comment)
+        console.log('res', res)
         message.success(vote);
-        this.setState({
-          comment
-        });
+        // this.setState({
+        //   comment
+        // });
       });
   }
 
   cancel = (e) => {
     console.log(e);
   }
-
-  sortByVoteScore = ((a, b) => {
-    var a = a.voteScore;
-    var b = b.voteScore;
-    if (b < a) {
-      return -1;
-    }
-    if (b > a) {
-      return 1;
-    }
-    return 0;
-  });
   
   componentDidMount() {
     const id = this.props.match.params.id;
@@ -132,8 +120,9 @@ class PostIndex extends React.Component {
       .then(() => {
         this.props.getComments(id)
           .then((res) => {
+            const sortedComments = sortBy(res.comments, 'voteScore').reverse();
             this.setState({
-              comments: res.comments,
+              comments: sortedComments,
             });
           });
         });
@@ -206,7 +195,7 @@ class PostIndex extends React.Component {
 
             <br />
 
-            {comments.sort(this.sortByVoteScore).map((comment, index) => (
+            {this.state.comments.map((comment, index) => (
               <Card key={index} style={{ marginBottom: 20 }}>
                 <Avatar icon="user" />
                 <h3>{comment.author}</h3>
