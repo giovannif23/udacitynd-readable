@@ -8,6 +8,7 @@ import {
   REQUEST_POST,
   RECEIVE_POST,
   RECEIVE_POSTS,
+  POST_REMOVED,
   ADD_COMMENT,
   UPDATE_COMMENT,
   UPDATE_COMMENT_SUCCESS,
@@ -51,6 +52,9 @@ function post (state = initialState.post, action) {
       return Object.assign({}, state, action.post);
     
     case RECEIVE_POSTS :
+      return Object.assign({}, state, action.posts);
+    
+    case POST_REMOVED:
       return Object.assign({}, state, action.posts);
     
     default :

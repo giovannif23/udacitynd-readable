@@ -7,6 +7,7 @@ export const UPDATE_POST_SUCCESS = 'UPDATE_POST_SUCCESS';
 export const REQUEST_POST = 'REQUEST_POST';
 export const RECEIVE_POST = 'RECEIVE_POST';
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
+export const POST_REMOVED = 'POST_REMOVED';
 
 export const ADD_COMMENT = 'ADD_COMMENT';
 export const UPDATE_COMMENT = 'UPDATE_COMMENT';
@@ -86,6 +87,22 @@ export function receivePosts(json) {
   }
 }
 
+export function deletePost (id) {
+  return dispatch => {
+    return API.deletePost(id)
+      .then(json => dispatch(postRemoved(json)));
+  }
+}
+
+export function postRemoved(json) {
+  console.log('postRemoved', json)
+  return {
+    type: POST_REMOVED,
+    post: json,
+  }
+}
+
+
 export function dispatchAddComment (comment) {
   return dispatch => {
     return API.createComment (comment)
@@ -142,7 +159,7 @@ export function receiveComment (json) {
   }
 }
 
-export function deleteComment (id, parentId) {
+export function deleteComment (id) {
   return dispatch => {
     return API.deleteComment (id)
       .then(json => dispatch(commentRemoved(id)));

@@ -6,7 +6,7 @@ import { getPosts, voteForPost, voteForPostOnCard } from '../../actions';
 import { capitalize } from '../utils/helpers';
 import PageTemplate from '../templates/PageTemplate';
 import Header from '../organisms/Header';
-import { Button, Card, Icon, Input, Select, Tag, Row, Col, message } from 'antd';
+import { Alert, Button, Card, Icon, Input, Select, Tag, Row, Col, message } from 'antd';
 import { sortBy } from 'lodash';
 
 const ButtonGroup = Button.Group;
@@ -84,6 +84,13 @@ class Index extends React.Component {
 
         <Row gutter={30}>
           <Col span={12} offset={6}>
+            {!this.state.posts.length && 
+              <Alert
+                message="Shucks..."
+                description="There are no posts. You should add some!"
+                type="warning"
+              />
+            }
             {this.state.posts.map((post, index) => (
               <Card 
                 key={index} 

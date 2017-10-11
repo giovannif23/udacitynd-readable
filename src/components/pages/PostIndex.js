@@ -5,6 +5,7 @@ import * as API from '../utils/api';
 import { 
   dispatchAddComment, 
   deleteComment, 
+  deletePost, 
   getPost, 
   getPostComments,
   voteForComment,
@@ -69,6 +70,14 @@ class PostIndex extends React.Component {
       .then((res) => {
         message.success('Comment has been deleted')
       });
+  }
+
+  confirmDeletePost = (id) => {
+    console.log(this.props.history)
+    const parentId = this.props.match.params.id;
+    this.props.deletePost(id)
+    .then(() => message.success('Post has been deleted'))
+    .then(() => this.props.history.push('/'));
   }
 
   confirmDeleteComment = (id) => {
@@ -155,7 +164,7 @@ class PostIndex extends React.Component {
               </Link>
               <Popconfirm 
                 title="Are you sure delete this post?" 
-                onConfirm={this.confirm} 
+                onConfirm={() => this.confirmDeletePost(post.id)} 
                 onCancel={this.cancel} 
                 okText="Yes" 
                 cancelText="No">
@@ -276,6 +285,7 @@ function mapDispatchToProps(dispatch) {
   return {
     addComment: (data) => dispatch(dispatchAddComment(data)),
     deleteComment: (data) => dispatch(deleteComment(data)),
+    deletePost: (data) => dispatch(deletePost(data)),
     getComments: (data) => dispatch(getPostComments(data)),
     get: (data) => dispatch(getPost(data)),
     vote: (id, data) => dispatch(voteForPost(id, data)),
