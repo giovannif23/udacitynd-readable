@@ -25,6 +25,8 @@ class PostCreate extends React.Component {
     
     const post = this.state;
     post.id = uuidv4();
+    post.timestamp = Date.now();
+    
     this.props.add(post)
       .then(() => {
         message.success('Post was created');

@@ -7,6 +7,7 @@ import { capitalize } from '../utils/helpers';
 import PageTemplate from '../templates/PageTemplate';
 import Header from '../organisms/Header';
 import { Button, Card, Icon, Input, Select, Tag, Row, Col, message } from 'antd';
+import { sortBy } from 'lodash';
 
 const ButtonGroup = Button.Group;
 const Option = Select.Option;
@@ -25,25 +26,14 @@ class Index extends React.Component {
       .then((res) => {
         const { post } = res;
         const { posts } = this.state.posts;
-        console.log('POST', post)
-        console.log('STATE', this.state)
         message.success(vote);
         this.setState(Object.assign([{}], ...this.state.posts, post))
       });
   }
 
   sortPosts = (value) => {
-    const sortedPosts = this.state.posts.sort((prev, next) => {
-      var a = prev[value];
-      var b = next[value];
-      if (a < b) {
-        return -1;
-      }
-      if (a > b) {
-        return 1;
-      }
-      return 0;
-    });
+    const sortedPosts = (value === 'title' ? sortBy(this.state.posts, [value]) : sortBy(this.state.posts, [value]).reverse());
+    console.log('sortedPosts', sortedPosts)
     this.setState({
       sortValue: value,
       posts: sortedPosts,
