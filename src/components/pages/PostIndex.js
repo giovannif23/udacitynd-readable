@@ -90,15 +90,13 @@ class PostIndex extends React.Component {
 
   voteCommentHandler = (id, vote) => {
     const voteOption = { option: vote };
-    console.log('option', voteOption)
-    console.log('vote', vote)
     this.props.voteComment(id, voteOption)
       .then((res) => {
-        console.log('res', res)
+        const { comments } = res;
         message.success(vote);
-        // this.setState({
-        //   comment
-        // });
+        this.setState({
+          comments
+        })
       });
   }
 
@@ -129,13 +127,13 @@ class PostIndex extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.comments !== prevProps.comments) {
-      this.setState({
-        comments: this.props.comments,
-        author: '',
-        body: '',
-      });
-    }
+    // if (this.props.comments !== prevProps.comments) {
+    //   this.setState({
+    //     comments: this.props.comments,
+    //     author: '',
+    //     body: '',
+    //   });
+    // }
   }
 
   render() {

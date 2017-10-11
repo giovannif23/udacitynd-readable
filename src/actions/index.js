@@ -150,7 +150,6 @@ export function deleteComment (id, parentId) {
 }
 
 export function updateCommentSuccess(json) {
-  console.log('updateCommentSuccess', json)
   return {
     type: UPDATE_COMMENT_SUCCESS,
     comment: json,
@@ -160,8 +159,7 @@ export function updateCommentSuccess(json) {
 export function voteForComment(id, vote) {
   return dispatch => {
     return API.voteForComment(id, vote)
-      .then(json => dispatch(updateCommentSuccess(json)))
-      .then(() => dispatch(getPosts()));
+      .then(json => dispatch(getPostComments(json['parentId'])));
   }
 }
 
