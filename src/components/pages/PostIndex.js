@@ -2,7 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import * as API from '../utils/api';
-import { voteForPost, dispatchAddComment, deleteComment, getPost, getPostComments } from '../../actions';
+import { 
+  dispatchAddComment, 
+  deleteComment, 
+  getPost, 
+  getPostComments,
+  voteForComment,
+  voteForPost, 
+} from '../../actions';
 import { capitalize, uuidv4 } from '../utils/helpers';
 import moment from 'moment';
 import PageTemplate from '../templates/PageTemplate';
@@ -80,10 +87,24 @@ class PostIndex extends React.Component {
       });
   }
 
+  voteCommentHandler = (id, vote) => {
+    const voteOption = { option: vote };
+    console.log('option', voteOption)
+    console.log('vote', vote)
+    this.props.voteComment(id, voteOption)
+      .then((res) => {
+        const { comment } = res;
+        console.log('comment', comment)
+        message.success(vote);
+        this.setState({
+          comment
+        });
+      });
+  }
+
   cancel = (e) => {
     console.log(e);
   }
-
 
   sortByVoteScore = ((a, b) => {
     var a = a.voteScore;
@@ -198,8 +219,8 @@ class PostIndex extends React.Component {
                 </Tag>
 
                 <ButtonGroup>
-                  <Button size="small" icon="like-o" />
-                  <Button size="small" icon="dislike-o" />
+                  <Button onClick={() => this.voteCommentHandler(comment.id, 'upVote')}  size="small" icon="like-o" />
+                  <Button onClick={() => this.voteCommentHandler(comment.id, 'upVote')}  size="small" icon="dislike-o" />
                 </ButtonGroup>
 
                 <div style={{ position: 'absolute', top: 20, right: 20 }}>
@@ -269,6 +290,7 @@ function mapDispatchToProps(dispatch) {
     getComments: (data) => dispatch(getPostComments(data)),
     get: (data) => dispatch(getPost(data)),
     vote: (id, data) => dispatch(voteForPost(id, data)),
+    voteComment: (id, data) => dispatch(voteForComment(id, data)),
   }
 }
 

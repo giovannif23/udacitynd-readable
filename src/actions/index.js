@@ -10,6 +10,7 @@ export const RECEIVE_POSTS = 'RECEIVE_POSTS';
 
 export const ADD_COMMENT = 'ADD_COMMENT';
 export const UPDATE_COMMENT = 'UPDATE_COMMENT';
+export const UPDATE_COMMENT_SUCCESS = 'UPDATE_COMMENT_SUCCESS';
 export const COMMENT_REMOVED = 'COMMENT_REMOVED';
 export const RECEIVE_COMMENT = 'RECEIVE_COMMENT';
 export const RECEIVE_POST_COMMENTS = 'RECEIVE_POST_COMMENTS';
@@ -139,3 +140,18 @@ export function deleteComment (id, parentId) {
       .then(json => dispatch(commentRemoved(id)));
   }
 }
+
+export function updateCommentSuccess(json) {
+  return {
+    type: UPDATE_COMMENT_SUCCESS,
+    comment: json,
+  }
+}
+
+export function voteForComment(id, vote) {
+  return dispatch => {
+    return API.voteForComment(id, vote)
+      .then(json => dispatch(updateCommentSuccess(json)));
+  }
+}
+

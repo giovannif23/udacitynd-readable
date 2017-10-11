@@ -10,6 +10,7 @@ import {
   RECEIVE_POSTS,
   ADD_COMMENT,
   UPDATE_COMMENT,
+  UPDATE_COMMENT_SUCCESS,
   COMMENT_REMOVED,
   RECEIVE_POST_COMMENTS,
 } from '../actions';
@@ -64,6 +65,9 @@ function comments (state = [], action) {
     
     case UPDATE_COMMENT:
       return [...state, action.comment];
+
+    case UPDATE_COMMENT_SUCCESS :
+      return Object.assign({}, state, action.comment);
     
     case COMMENT_REMOVED:
       return state.filter(comment => comment.id !== action.commentId);
