@@ -66,7 +66,9 @@ class PostIndex extends React.Component {
 
   confirm = (id) => {
     this.props.deleteComment()
-      .then(() => message.success('Comment has been deleted'));
+      .then((res) => {
+        message.success('Comment has been deleted')
+      });
   }
 
   confirmDeleteComment = (id) => {
@@ -127,13 +129,13 @@ class PostIndex extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    // if (this.props.comments !== prevProps.comments) {
-    //   this.setState({
-    //     comments: this.props.comments,
-    //     author: '',
-    //     body: '',
-    //   });
-    // }
+    if (this.props.comments !== prevProps.comments) {
+      this.setState({
+        comments: this.props.comments,
+        author: '',
+        body: '',
+      });
+    }
   }
 
   render() {
