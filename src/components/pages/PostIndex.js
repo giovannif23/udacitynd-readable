@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import * as API from '../utils/api';
-import { dispatchAddComment, deleteComment, getPostComments } from '../../actions';
+import { voteForPost, dispatchAddComment, deleteComment, getPost, getPostComments } from '../../actions';
 import { capitalize, uuidv4 } from '../utils/helpers';
 import moment from 'moment';
 import PageTemplate from '../templates/PageTemplate';
@@ -57,7 +57,6 @@ class PostIndex extends React.Component {
   };
 
   confirm = (id) => {
-    console.log(id);
     this.props.deleteComment()
       .then(() => message.success('Comment has been deleted'));
   }
@@ -66,6 +65,19 @@ class PostIndex extends React.Component {
     const parentId = this.props.match.params.id;
     this.props.deleteComment(id, parentId)
       .then(() => message.success('Comment has been deleted'));
+  }
+
+  voteHandler = (id, vote) => {
+    const voteOption = { option: vote };
+
+    this.props.vote(id, voteOption)
+      .then((res) => {
+        const { post } = res;
+        message.success(vote);
+        this.setState({
+          post
+        });
+      });
   }
 
   cancel = (e) => {
@@ -87,11 +99,13 @@ class PostIndex extends React.Component {
   
   componentDidMount() {
     const id = this.props.match.params.id;
-
-    API.getPost(id)
+   
+    // Get post
+    this.props.get(id)
       .then((res) => {
+        const { post } = res;
         this.setState({
-          post: res,
+          post
         });
       })
       .then(() => {
@@ -100,8 +114,8 @@ class PostIndex extends React.Component {
             this.setState({
               comments: res.comments,
             });
-          })
-      });
+          });
+        });
   }
 
   componentDidUpdate(prevProps) {
@@ -149,12 +163,12 @@ class PostIndex extends React.Component {
                 </Tag>
 
                 <Tag>
-                  Score {post.voteScore}
+                  Score {this.state.post.voteScore}
                 </Tag>
 
                 <ButtonGroup>
-                  <Button size="small" icon="like-o" />
-                  <Button size="small" icon="dislike-o" />
+                  <Button onClick={() => this.voteHandler(post.id, 'upVote')} size="small" icon="like-o" />
+                  <Button onClick={() => this.voteHandler(post.id, 'downVote')} size="small" icon="dislike-o" />
                 </ButtonGroup>
               </Col>
             </Row>
@@ -241,9 +255,10 @@ class PostIndex extends React.Component {
   }
 }
 
-function mapStateToProps({ comments }) {
+function mapStateToProps({ comments, post }) {
   return {
-    comments
+    comments,
+    post
   }
 }
 
@@ -252,6 +267,8 @@ function mapDispatchToProps(dispatch) {
     addComment: (data) => dispatch(dispatchAddComment(data)),
     deleteComment: (data) => dispatch(deleteComment(data)),
     getComments: (data) => dispatch(getPostComments(data)),
+    get: (data) => dispatch(getPost(data)),
+    vote: (id, data) => dispatch(voteForPost(id, data)),
   }
 }
 

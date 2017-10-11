@@ -7,6 +7,7 @@ import {
   UPDATE_POST_SUCCESS,
   REQUEST_POST,
   RECEIVE_POST,
+  RECEIVE_POSTS,
   ADD_COMMENT,
   UPDATE_COMMENT,
   COMMENT_REMOVED,
@@ -25,38 +26,31 @@ const initialState = {
 }
 
 function post (state = initialState.post, action) {
-  const { post } = action;
-
   switch (action.type) {
     case ADD_POST :
-     const post = {
-       action
-     }
       return [...state, action.post];
     
     case ADD_POST_SUCCESS :
-      return Object.assign({}, state, post);
+      return Object.assign({}, state, action.post);
     
     case UPDATE_POST :
       return {
         ...state,
-        title: post.title,
-        body: post.body,
+        title: action.post.title,
+        body: action.post.body,
       }
 
     case UPDATE_POST_SUCCESS :
-      return Object.assign({}, state, post);
+      return Object.assign({}, state, action.post);
     
     case REQUEST_POST :
-      return Object.assign({}, state, post);
+      return Object.assign({}, state, action.post);
     
     case RECEIVE_POST :
-      return {
-        ...state,
-        id: post.id,
-        title: post.title,
-        body: post.body,
-      };
+      return Object.assign({}, state, action.post);
+    
+    case RECEIVE_POSTS :
+      return Object.assign({}, state, action.posts);
     
     default :
       return state;

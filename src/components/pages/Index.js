@@ -2,10 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import * as API from '../utils/api';
+import { getPosts, voteForPost } from '../../actions';
 import { capitalize } from '../utils/helpers';
 import PageTemplate from '../templates/PageTemplate';
 import Header from '../organisms/Header';
-import { Button, Card, Icon, Input, Select, Tag, Row, Col } from 'antd';
+import { Button, Card, Icon, Input, Select, Tag, Row, Col, message } from 'antd';
 
 const ButtonGroup = Button.Group;
 const Option = Select.Option;
@@ -16,6 +17,20 @@ class Index extends React.Component {
     posts: [],
     sortValue: 'voteScore',
   };
+
+  voteHandler = (id, vote) => {
+    const voteOption = { option: vote };
+
+    this.props.vote(id, voteOption)
+      .then((res) => {
+        const { post } = res;
+        const { posts } = this.state.posts;
+        console.log('POST', post)
+        console.log('STATE', this.state)
+        message.success(vote);
+        this.setState(Object.assign([{}], ...this.state.posts, post))
+      });
+  }
 
   sortPosts = (value) => {
     const sortedPosts = this.state.posts.sort((prev, next) => {
@@ -36,22 +51,25 @@ class Index extends React.Component {
   };
 
   componentDidMount() {
+    this.props.get()
+      .then((res) => {
+        const { posts } = res;
+        this.setState({
+          posts,
+        });
+      });
+
+    // static and does not need to be part of store
     API.getCategories()
       .then((res) => {
         this.setState({
           categories: res.categories,
         });
       });
-    API.getPosts()
-      .then((res) => {
-        this.setState({
-          posts: res,
-        });
-      });
   }
 
   render() {
-    const { categories, posts, sortValue } = this.state;
+    const { categories, sortValue } = this.state;
     
     return (
       <PageTemplate
@@ -75,7 +93,7 @@ class Index extends React.Component {
 
         <Row gutter={30}>
           <Col span={12} offset={6}>
-            {posts.map((post, index) => (
+            {this.state.posts.map((post, index) => (
               <Card 
                 key={index} 
                 title={<Link to={`post/${post.id}`}>{post.title}</Link>} 
@@ -93,8 +111,8 @@ class Index extends React.Component {
                 </Tag>
 
                 <ButtonGroup>
-                  <Button size="small" icon="like-o" />
-                  <Button size="small" icon="dislike-o" />
+                  <Button onClick={() => this.voteHandler(post.id, 'upVote')}  size="small" icon="like-o" />
+                  <Button onClick={() => this.voteHandler(post.id, 'downVote')}  size="small" icon="dislike-o" />
                 </ButtonGroup>
               </Card>
             ))}
@@ -105,4 +123,17 @@ class Index extends React.Component {
   }
 }
 
-export default connect()(Index);
+function mapStateToProps(posts) {
+  return {
+    posts
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    get: () => dispatch(getPosts()),
+    vote: (id, data) => dispatch(voteForPost(id, data)),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Index);

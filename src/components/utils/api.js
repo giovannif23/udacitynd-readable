@@ -47,6 +47,14 @@ export const updatePost = (id, post) =>
     })
     .then(res => res.json());
 
+export const voteForPost = (id, vote) => 
+  fetch(`${api}/posts/${id}`, { 
+      headers, 
+      method: 'POST',
+      body: JSON.stringify(vote),
+    })
+    .then(res => res.json());
+
 export const getComment = (id) => 
   fetch(`${api}/comments/${id}`, { headers })
     .then(res => res.json());

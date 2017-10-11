@@ -6,6 +6,7 @@ export const UPDATE_POST = 'UPDATE_POST';
 export const UPDATE_POST_SUCCESS = 'UPDATE_POST_SUCCESS';
 export const REQUEST_POST = 'REQUEST_POST';
 export const RECEIVE_POST = 'RECEIVE_POST';
+export const RECEIVE_POSTS = 'RECEIVE_POSTS';
 
 export const ADD_COMMENT = 'ADD_COMMENT';
 export const UPDATE_COMMENT = 'UPDATE_COMMENT';
@@ -34,6 +35,13 @@ export function updatePost (id, post) {
   }
 }
 
+export function voteForPost (id, vote) {
+  return dispatch => {
+    return API.voteForPost(id, vote)
+      .then(json => dispatch(updatePostSuccess(json)));
+  }
+}
+
 export function updatePostSuccess (json) {
   return {
     type: UPDATE_POST_SUCCESS,
@@ -41,10 +49,10 @@ export function updatePostSuccess (json) {
   }
 }
 
-export function receivePost (json) {
-  return {
-    type: RECEIVE_POST,
-    post: json,
+export function getPosts() {
+  return dispatch => {
+    return API.getPosts()
+      .then(json => dispatch(receivePosts(json)));
   }
 }
 
@@ -52,6 +60,20 @@ export function getPost (id) {
   return dispatch => {
     return API.getPost (id)
       .then(json => dispatch(receivePost(json)));
+  }
+}
+
+export function receivePost(json) {
+  return {
+    type: RECEIVE_POST,
+    post: json,
+  }
+}
+
+export function receivePosts(json) {
+  return {
+    type: RECEIVE_POSTS,
+    posts: json,
   }
 }
 
