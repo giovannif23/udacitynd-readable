@@ -73,7 +73,6 @@ class PostIndex extends React.Component {
   }
 
   confirmDeletePost = (id) => {
-    console.log(this.props.history)
     const parentId = this.props.match.params.id;
     this.props.deletePost(id)
     .then(() => message.success('Post has been deleted'))

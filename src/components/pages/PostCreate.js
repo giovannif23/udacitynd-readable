@@ -28,12 +28,8 @@ class PostCreate extends React.Component {
     post.timestamp = Date.now();
     
     this.props.add(post)
-      .then(() => {
-        message.success('Post was created');
-      })
-      .then(() => {
-        this.props.history.goBack();
-      });
+      .then(() => message.success('Post was created'))
+      .then(() => this.props.history.goBack());
   }
 
   handleInputChange = (e) =>  {

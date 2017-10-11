@@ -33,12 +33,8 @@ class PostEdit extends React.Component {
     const post = this.state;
 
     this.props.update(id, post)
-      .then(() => {
-        message.success('Post was updated');
-      })
-      .then(() => {
-        this.props.history.goBack();
-      });
+      .then(() => message.success('Post was updated'))
+      .then(() => this.props.history.goBack());
   };
 
   handleInputChange = (e) => {

@@ -34,12 +34,8 @@ class CommentEdit extends React.Component {
     comment.timestamp = Date.now();
     
     this.props.update(id, comment)
-      .then((res) => {
-        message.success('Comment was updated');
-      })
-      .then(() => {
-        this.props.history.goBack();
-      });
+      .then(() => message.success('Comment was updated'))
+      .then(() => this.props.history.goBack());
   };
 
   handleInputChange = (e) => {
