@@ -34,7 +34,6 @@ class Index extends React.Component {
 
   sortPosts = (value) => {
     const sortedPosts = (value === 'title' ? sortBy(this.state.posts, [value]) : sortBy(this.state.posts, [value]).reverse());
-    console.log('sortedPosts', sortedPosts)
     this.setState({
       sortValue: value,
       posts: sortedPosts,
@@ -44,9 +43,9 @@ class Index extends React.Component {
   componentDidMount() {
     this.props.get()
       .then((res) => {
-        const { posts } = res;
+        const sortedPosts = sortBy(res.posts, 'voteScore').reverse();
         this.setState({
-          posts,
+          posts: sortedPosts
         });
       });
 
@@ -108,7 +107,7 @@ class Index extends React.Component {
                   Score {post.voteScore}
                 </Tag>
 
-                <ButtonGroup>
+                <ButtonGroup style={{display: 'none'}}>
                   <Button onClick={() => this.voteHandler(post.id, 'upVote')}  size="small" icon="like-o" />
                   <Button onClick={() => this.voteHandler(post.id, 'downVote')}  size="small" icon="dislike-o" />
                 </ButtonGroup>

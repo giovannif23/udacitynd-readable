@@ -8,6 +8,7 @@ import { Alert, Card, Icon, Tag, Row, Col } from 'antd';
 
 class PostsByCategory extends React.Component {
   state = {
+    category: '',
     posts: [],
   };
 
@@ -17,13 +18,14 @@ class PostsByCategory extends React.Component {
     API.getPostsByCategory(category)
       .then((res) => {
         this.setState({
+          category,
           posts: res,
         });
       });
   }
 
   render() {
-    const { posts } = this.state;
+    const { category, posts } = this.state;
 
     return (
       <PageTemplate
@@ -33,6 +35,8 @@ class PostsByCategory extends React.Component {
             <Link to="/">
               <Icon type="arrow-left" />Back to Home
             </Link>
+
+            <h2 style={{ marginBottom: 30, marginTop: 20 }}>Showing all Tagged: <strong>{category && capitalize(category)}</strong></h2>
           </Col>
 
           <br />
