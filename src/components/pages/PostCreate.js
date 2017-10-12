@@ -84,6 +84,7 @@ class PostCreate extends React.Component {
   }
 
   render() {
+    console.log('PROPS', this.props)
     return (
       <PageTemplate
         header={<Header/>}>
@@ -140,7 +141,7 @@ class PostCreate extends React.Component {
   }
 }
 
-function mapStateToProps ({ post }) {
+function mapStateToProps ({post}) {
   return {
     post
   }
