@@ -39,7 +39,6 @@ class PostCreate extends React.Component {
     const post = this.state;
     const empty = this.validate(post.title, post.body, post.author);
     const formInvalid = empty.title || empty.body || empty.author;
-
     if (formInvalid) {
       notification.open({
         message: 'Error',
