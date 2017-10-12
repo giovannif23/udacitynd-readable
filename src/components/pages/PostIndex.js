@@ -28,6 +28,7 @@ import {
   Row, 
   Popconfirm, 
   message,
+  notification,
 } from 'antd';
 
 const ButtonGroup = Button.Group;
@@ -40,28 +41,61 @@ class PostIndex extends React.Component {
     post: {},
     author: '', 
     body: '',
+    errors: {
+      author: false,
+      body: false,
+    }
   };
+
+  validate = (author, body) => {
+    return {
+      author: author.length === 0,
+      body: body.length === 0,
+    };
+  }
 
   handleSubmit = (e) => {
     e.preventDefault();
-    const { post } = this.state;
-    const comment = {
-      id: uuidv4(),
-      parentId: post.id,
-      author: this.state.author,
-      body: this.state.body,
-      timestamp: Date.now(),
-    };
+    const post = this.state;
+    const empty = this.validate(this.state.author, this.state.body);
+    const formInvalid = empty.author || empty.body;
 
-    this.props.addComment(comment);
+    if (formInvalid) {
+      notification.open({
+        message: 'Error',
+        description: 'Please fill out all form fields.',
+        icon: <Icon type="frown-circle" style={{ color: '#f04134' }} />,
+      });
+
+      this.setState({
+        errors: {
+          author: empty.author,
+          body: empty.body,
+        }
+      })
+    } else {
+      const comment = {
+        id: uuidv4(),
+        parentId: post.id,
+        author: this.state.author,
+        body: this.state.body,
+        timestamp: Date.now(),
+      };
+      this.props.addComment(comment);
+    }
   }
 
   handleInputChange = (e) => {
     const target = e.target;
     const value = target.value;
     const name = target.name;
+    const invalid = value.length === 0;
+
     this.setState({
-      [name]: value
+      [name]: value,
+      errors: {
+        [name]: invalid
+      }
     });
   };
 
@@ -250,7 +284,7 @@ class PostIndex extends React.Component {
               <FormItem label="Author">
                 <Input
                   name="author"
-                  style={{ width: '100%' }}
+                  style={{ width: '100%', borderColor: this.state.errors.author && 'red' }}
                   value={this.state.author}
                   onChange={this.handleInputChange}  />
               </FormItem>
@@ -259,7 +293,7 @@ class PostIndex extends React.Component {
                 <TextArea
                   name="body"
                   rows={4}
-                  style={{ width: '100%' }}
+                  style={{ width: '100%', borderColor: this.state.errors.body && 'red' }}
                   value={this.state.body}
                   onChange={this.handleInputChange}  />
               </FormItem>

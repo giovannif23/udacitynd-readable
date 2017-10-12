@@ -6,7 +6,7 @@ import { addPost } from '../../actions';
 import { uuidv4 } from '../utils/helpers';
 import PageTemplate from '../templates/PageTemplate';
 import Header from '../organisms/Header';
-import { Button, Col, Form, Icon, Input, message, Tag, Row, Select } from 'antd';
+import { Button, Col, Form, Icon, Input, message, Tag, Row, Select, notification } from 'antd';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -18,26 +18,64 @@ class PostCreate extends React.Component {
     body: '',
     author: '',
     category: 'react',
+    errors: {
+      title: false,
+      body: false,
+      author: false,
+    }
   };
 
+  validate = (title, body, author) => {
+    return {
+      title: title.length === 0,
+      body: body.length === 0,
+      author: author.length === 0,
+    };
+  }
+  
   handleSubmit = (e) => {
     e.preventDefault();
-    
+
     const post = this.state;
-    post.id = uuidv4();
-    post.timestamp = Date.now();
-    
-    this.props.add(post)
-      .then(() => message.success('Post was created'))
-      .then(() => this.props.history.goBack());
+    const empty = this.validate(post.title, post.body, post.author);
+    const formInvalid = empty.title || empty.body || empty.author;
+
+    if (formInvalid) {
+      notification.open({
+        message: 'Error',
+        description: 'Please fill out all form fields.',
+        icon: <Icon type="frown-circle" style={{ color: '#f04134' }} />,
+      });
+
+      this.setState({
+        errors: {
+          title: empty.title,
+          body: empty.body,
+          author: empty.author,
+        }
+      })
+    } else {
+      post.id = uuidv4();
+      post.timestamp = Date.now();
+      
+      this.props.add(post)
+        .then(() => message.success('Post was created'))
+        .then(() => this.props.history.push('/'));
+    }
+
   }
 
   handleInputChange = (e) =>  {
     const target = e.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
+    const invalid = value.length === 0;
+
     this.setState({ 
-      [name]: value
+      [name]: value, 
+      errors: {
+        [name]: invalid
+      }
     });
   }
 
@@ -52,36 +90,38 @@ class PostCreate extends React.Component {
         <Row>
           <Col span={12} offset={6}>
             <h1>Create Post</h1>
-
+            <small>* All fields are required.</small>
+            
+            <br />
             <br />
 
             <Form style={{ width: '100%' }} layout="vertical" onSubmit={this.handleSubmit}>
-              <FormItem label="Title">
+              <FormItem label="Title *">
                 <Input
                   name="title"
-                  style={{ width: '100%' }}
+                  style={{ width: '100%', borderColor: this.state.errors.title && 'red' }}
                   value={this.state.title}
                   onChange={this.handleInputChange} />
               </FormItem>
 
-              <FormItem label="Body">
+              <FormItem label="Body *">
                 <TextArea
                   name="body"
                   rows={4}
-                  style={{ width: '100%' }}
+                  style={{ width: '100%', borderColor: this.state.errors.body && 'red' }}
                   value={this.state.body}
                   onChange={this.handleInputChange} />
               </FormItem>
 
-              <FormItem label="Author">
+              <FormItem label="Author *">
                 <Input
                   name="author"
-                  style={{ width: '100%' }}
+                  style={{ width: '100%', borderColor: this.state.errors.author && 'red' }}
                   value={this.state.author}
                   onChange={this.handleInputChange} />
               </FormItem>
 
-              <FormItem label="Category">
+              <FormItem label="Category *">
                 <Select
                   style={{ width: '100%' }}
                   value={this.state.category} onChange={this.handleSelectChange}>
