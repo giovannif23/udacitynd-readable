@@ -83,7 +83,6 @@ class PostCreate extends React.Component {
   }
 
   render() {
-    console.log('PROPS', this.props)
     return (
       <PageTemplate
         header={<Header/>}>

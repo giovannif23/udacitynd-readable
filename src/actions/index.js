@@ -95,7 +95,6 @@ export function deletePost (id) {
 }
 
 export function postRemoved(json) {
-  console.log('postRemoved', json)
   return {
     type: POST_REMOVED,
     post: json,
