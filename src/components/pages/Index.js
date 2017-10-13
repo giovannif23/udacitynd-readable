@@ -96,7 +96,7 @@ class Index extends React.Component {
             ))}
           </Col>
         </Row>
-
+        
         <Row gutter={30}>
           <Col span={12} offset={6}>
             {!this.state.posts.length && 
@@ -135,6 +135,9 @@ class Index extends React.Component {
                 </Link>
                 <Tag>
                   Score {post.voteScore}
+                </Tag>
+                <Tag>
+                  Comments {post.commentCount}
                 </Tag>
 
                 <ButtonGroup>

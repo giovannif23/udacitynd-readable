@@ -16,6 +16,7 @@ import {
 } from '../actions';
 
 function posts (state = [], action) {
+  let newState = state.slice();
   switch (action.type) {
     case ADD_POST :
       return [...state, action.post];
@@ -40,7 +41,7 @@ function posts (state = [], action) {
       return Object.assign({}, state, action.post);
     
     case RECEIVE_POSTS :
-      return Object.assign({}, state, action.posts);
+      return Object.assign([{}], state, action.posts);
     
     case POST_REMOVED:
       return Object.assign({}, state, action.posts);

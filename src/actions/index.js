@@ -76,12 +76,19 @@ export function getPosts() {
   return dispatch => {
     return API.getPosts()
       .then((json) => {
-        json.forEach(post => {
-          dispatch(getPostComments(post.id))
+        json.forEach((post, index) => {
+          getPostCommentCount(post.id)
+            .then(res => {
+              return json[index].commentCount = res.length;
+            });
         });
         return dispatch(receivePosts(json));
       });
   }
+}
+
+function getPostCommentCount (id) {
+  return API.getPostComments(id);
 }
 
 export function getPost (id) {
