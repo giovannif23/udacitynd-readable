@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
 import * as API from '../utils/api';
-import { addPost } from '../../actions';
-import { uuidv4 } from '../utils/helpers';
+import { addPost, getCategories } from '../../actions';
+import { capitalize, uuidv4 } from '../utils/helpers';
 import PageTemplate from '../templates/PageTemplate';
 import Header from '../organisms/Header';
 import { Button, Col, Form, Icon, Input, message, Tag, Row, Select, notification } from 'antd';
@@ -17,19 +17,22 @@ class PostCreate extends React.Component {
     title: '',
     body: '',
     author: '',
-    category: 'react',
+    category: '',
+    categories: [],
     errors: {
       title: false,
       body: false,
       author: false,
+      category: false,
     }
   };
 
-  validate = (title, body, author) => {
+  validate = (title, body, author, category) => {
     return {
       title: title.length === 0,
       body: body.length === 0,
       author: author.length === 0,
+      category: category.length === 0,
     };
   }
   
@@ -37,8 +40,8 @@ class PostCreate extends React.Component {
     e.preventDefault();
 
     const post = this.state;
-    const empty = this.validate(post.title, post.body, post.author);
-    const formInvalid = empty.title || empty.body || empty.author;
+    const empty = this.validate(post.title, post.body, post.author, post.category);
+    const formInvalid = empty.title || empty.body || empty.author || empty.category;
     if (formInvalid) {
       notification.open({
         message: 'Error',
@@ -51,6 +54,7 @@ class PostCreate extends React.Component {
           title: empty.title,
           body: empty.body,
           author: empty.author,
+          category: empty.category,
         }
       })
     } else {
@@ -79,10 +83,31 @@ class PostCreate extends React.Component {
   }
 
   handleSelectChange = (value) => {
-    this.setState({ category: value });
+    const invalid = value.length === 0;
+    this.setState({ 
+      category: value, 
+      errors: {
+        category: invalid
+      }
+     });
+  }
+
+  componentDidMount() {
+    this.props.getCategories()
+      .then((res) => {
+        this.setState({
+          categories: res.categories,
+        });
+      });
   }
 
   render() {
+    const { categories } = this.state;
+    const categoryOptions = [];
+    categories.map((cat, index) => {
+      categoryOptions.push(<Option value={cat.name} key={index}>{capitalize(cat.name)}</Option>);
+    });
+
     return (
       <PageTemplate
         header={<Header/>}>
@@ -121,13 +146,13 @@ class PostCreate extends React.Component {
               </FormItem>
 
               <FormItem label="Category *">
-                <Select
-                  style={{ width: '100%' }}
-                  value={this.state.category} onChange={this.handleSelectChange}>
-                  <Option value="react">React</Option>
-                  <Option value="redux">Redux</Option>
-                  <Option value="udacity">Udacity</Option>
-                </Select>
+                  <Select
+                    style={{ width: '100%', border: '1px solid transparent',borderRadius: 5,  borderColor: this.state.errors.category ? 'red' : '#eee' }}
+                    value={this.state.category} 
+                    onChange={this.handleSelectChange}
+                    name="category">
+                    {categoryOptions}
+                  </Select>
               </FormItem>
 
               <Button htmlType="submit" type="primary" size="large">Save</Button>
@@ -148,6 +173,7 @@ function mapStateToProps ({post}) {
 function mapDispatchToProps (dispatch) {
   return {
     add: (data) => dispatch(addPost(data)),
+    getCategories: () => dispatch(getCategories()),
   }
 }
 

@@ -1,5 +1,7 @@
 import * as API from '../components/utils/api';
 
+export const GET_CATEGORIES_SUCCESS = 'GET_CATEGORIES_SUCCESS';
+
 export const ADD_POST = 'ADD_POST';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
 export const UPDATE_POST = 'UPDATE_POST';
@@ -15,6 +17,20 @@ export const UPDATE_COMMENT_SUCCESS = 'UPDATE_COMMENT_SUCCESS';
 export const COMMENT_REMOVED = 'COMMENT_REMOVED';
 export const RECEIVE_COMMENT = 'RECEIVE_COMMENT';
 export const RECEIVE_POST_COMMENTS = 'RECEIVE_POST_COMMENTS';
+
+export function getCategories () {
+  return dispatch => {
+    return API.getCategories()
+      .then(json => dispatch(getCategoriesSuccess(json)));
+  }
+}
+
+export function getCategoriesSuccess(json) {
+  return {
+    type: GET_CATEGORIES_SUCCESS,
+    categories: json.categories,
+  }
+}
 
 export function addPost (post) {
   return dispatch => {

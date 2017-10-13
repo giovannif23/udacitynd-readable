@@ -2,7 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import * as API from '../utils/api';
-import { getPosts, voteForPost, voteForPostOnCard } from '../../actions';
+import { 
+  getCategories, 
+  getPosts, 
+  voteForPost, 
+  voteForPostOnCard 
+} from '../../actions';
 import { capitalize } from '../utils/helpers';
 import PageTemplate from '../templates/PageTemplate';
 import Header from '../organisms/Header';
@@ -49,8 +54,7 @@ class Index extends React.Component {
         });
       });
 
-    // static and does not need to be part of store
-    API.getCategories()
+    this.props.getCategories()
       .then((res) => {
         this.setState({
           categories: res.categories,
@@ -129,6 +133,7 @@ function mapStateToProps(posts) {
 function mapDispatchToProps(dispatch) {
   return {
     get: () => dispatch(getPosts()),
+    getCategories: () => dispatch(getCategories()),
     vote: (id, data) => dispatch(voteForPostOnCard(id, data)),
   }
 }
