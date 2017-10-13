@@ -1,7 +1,6 @@
 import * as API from '../components/utils/api';
 
 export const GET_CATEGORIES_SUCCESS = 'GET_CATEGORIES_SUCCESS';
-export const ADD_POST = 'ADD_POST';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
 export const UPDATE_POST = 'UPDATE_POST';
 export const UPDATE_POST_SUCCESS = 'UPDATE_POST_SUCCESS';
@@ -17,7 +16,7 @@ export const RECEIVE_POST_COMMENTS = 'RECEIVE_POST_COMMENTS';
 
 export function getCategories () {
   return dispatch => {
-    return API.getCategories()
+    return API.getCategories ()
       .then(json => dispatch(getCategoriesSuccess(json)));
   }
 }
@@ -76,19 +75,19 @@ export function getPosts() {
   return dispatch => {
     return API.getPosts()
       .then((json) => {
+        console.log('JONS', json)
         json.forEach((post, index) => {
-          getPostCommentCount(post.id)
+          API.getPostComments(post.id)
             .then(res => {
-              return json[index].commentCount = res.length;
+              json[index].commentCount = res.length;
             });
         });
+        return json;
+      })
+      .then((json) => {
         return dispatch(receivePosts(json));
       });
   }
-}
-
-function getPostCommentCount (id) {
-  return API.getPostComments(id);
 }
 
 export function getPost (id) {

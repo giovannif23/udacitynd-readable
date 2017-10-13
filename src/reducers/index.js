@@ -1,7 +1,6 @@
 import { combineReducers } from 'redux';
 
 import {
-  ADD_POST,
   ADD_POST_SUCCESS,
   UPDATE_POST,
   UPDATE_POST_SUCCESS,
@@ -16,12 +15,11 @@ import {
 } from '../actions';
 
 function posts (state = [], action) {
-  let newState = state.slice();
-  switch (action.type) {
-    case ADD_POST :
-      return [...state, action.post];
-    
+  let updateIndex;
+
+  switch (action.type) {    
     case ADD_POST_SUCCESS :
+      const postCount = Object.keys(state).length
       return Object.assign({}, state, action.post);
     
     case UPDATE_POST :
@@ -38,7 +36,20 @@ function posts (state = [], action) {
       return Object.assign({}, state, action.post);
     
     case RECEIVE_POST :
-      return Object.assign({}, state, action.post);
+      if (Object.keys(state).length) {
+        for (let key in state) {
+          if (state[key].id === action.post.id) {
+            updateIndex = key;
+          }
+        }
+      } else {
+        updateIndex = 0
+      }
+
+      return {
+        ...state,
+        [updateIndex]: action.post,
+      }
     
     case RECEIVE_POSTS :
       return Object.assign([{}], state, action.posts);
