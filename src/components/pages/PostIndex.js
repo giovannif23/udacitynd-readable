@@ -56,6 +56,7 @@ class PostIndex extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
+    const parentId = this.props.match.params.id;
     const post = this.state;
     const empty = this.validate(this.state.author, this.state.body);
     const formInvalid = empty.author || empty.body;
@@ -76,12 +77,18 @@ class PostIndex extends React.Component {
     } else {
       const comment = {
         id: uuidv4(),
-        parentId: post.id,
+        parentId,
         author: this.state.author,
         body: this.state.body,
         timestamp: Date.now(),
       };
-      this.props.addComment(comment);
+      this.props.addComment(comment)
+        .then((res) => {
+          const sortedComments = sortBy(res.comments, 'voteScore').reverse();
+          this.setState({
+            comments: sortedComments,
+          })
+        });
     }
   }
 
@@ -107,10 +114,9 @@ class PostIndex extends React.Component {
   }
 
   confirmDeletePost = (id) => {
-    const parentId = this.props.match.params.id;
     this.props.deletePost(id)
-    .then(() => message.success('Post has been deleted'))
-    .then(() => this.props.history.push('/'));
+      .then(() => message.success('Post has been deleted'))
+      .then(() => this.props.history.push('/'));
   }
 
   confirmDeleteComment = (id) => {
@@ -251,7 +257,7 @@ class PostIndex extends React.Component {
 
                 <ButtonGroup>
                   <Button onClick={() => this.voteCommentHandler(comment.id, 'upVote')}  size="small" icon="like-o" />
-                  <Button onClick={() => this.voteCommentHandler(comment.id, 'upVote')}  size="small" icon="dislike-o" />
+                  <Button onClick={() => this.voteCommentHandler(comment.id, 'downVote')}  size="small" icon="dislike-o" />
                 </ButtonGroup>
 
                 <div style={{ position: 'absolute', top: 20, right: 20 }}>
@@ -310,7 +316,7 @@ class PostIndex extends React.Component {
 function mapStateToProps({ comments, post }) {
   return {
     comments,
-    post
+    post,
   }
 }
 

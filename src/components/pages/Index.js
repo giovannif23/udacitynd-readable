@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import * as API from '../utils/api';
 import { 
+  deletePost,
   getCategories, 
   getPosts, 
   voteForPost, 
@@ -11,7 +12,7 @@ import {
 import { capitalize } from '../utils/helpers';
 import PageTemplate from '../templates/PageTemplate';
 import Header from '../organisms/Header';
-import { Alert, Button, Card, Icon, Input, Select, Tag, Row, Col, message } from 'antd';
+import { Alert, Button, Card, Icon, Input, Select, Tag, Row, Col, message, Popconfirm } from 'antd';
 import { sortBy } from 'lodash';
 
 const ButtonGroup = Button.Group;
@@ -44,6 +45,17 @@ class Index extends React.Component {
       posts: sortedPosts,
     });
   };
+
+  confirmDeletePost = (id) => {
+    this.props.deletePost(id)
+      .then((res) => {
+        const sortedPosts = sortBy(res.posts, 'voteScore').reverse();
+        this.setState({
+          posts: sortedPosts
+        });
+      })
+      .then(() => message.success('Post has been deleted'));
+  }
 
   componentDidMount() {
     this.props.get()
@@ -98,9 +110,23 @@ class Index extends React.Component {
               <Card 
                 key={index} 
                 title={<Link to={`post/${post.id}`}>{post.title}</Link>} 
-                extra={<Link to={`post/${post.id}/edit`}> <Icon style={{ fontSize: 18 }} type="setting" /></Link>} 
+                extra={
+                  <div>
+                    <Link to={`post/${post.id}/edit`}> <Icon style={{ fontSize: 18 }
+                  } type="setting" /></Link>
+                  <Popconfirm title="Are you sure delete this post?"
+                    onConfirm={() => this.confirmDeletePost(post.id)}
+                    onCancel={this.cancel}
+                    okText="Yes"
+                    cancelText="No">
+                    <Icon style={{ color: 'red', fontSize: 18 }} type="delete" />
+                  </Popconfirm>
+                </div>
+                } 
                 style={{ marginBottom: 20, width: '100%'}}>
                 <p>{post.body}</p>
+                <br />
+                <p><strong>Author:</strong> {post.author}</p>
                 <br />
                 <Link key={index} to={`/${post.category}/posts`}>
                   <Tag>
@@ -111,7 +137,7 @@ class Index extends React.Component {
                   Score {post.voteScore}
                 </Tag>
 
-                <ButtonGroup style={{display: 'none'}}>
+                <ButtonGroup>
                   <Button onClick={() => this.voteHandler(post.id, 'upVote')}  size="small" icon="like-o" />
                   <Button onClick={() => this.voteHandler(post.id, 'downVote')}  size="small" icon="dislike-o" />
                 </ButtonGroup>
@@ -132,6 +158,7 @@ function mapStateToProps(posts) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    deletePost: (data) => dispatch(deletePost(data)),
     get: () => dispatch(getPosts()),
     getCategories: () => dispatch(getCategories()),
     vote: (id, data) => dispatch(voteForPostOnCard(id, data)),

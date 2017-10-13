@@ -1,7 +1,6 @@
 import * as API from '../components/utils/api';
 
 export const GET_CATEGORIES_SUCCESS = 'GET_CATEGORIES_SUCCESS';
-
 export const ADD_POST = 'ADD_POST';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
 export const UPDATE_POST = 'UPDATE_POST';
@@ -10,9 +9,7 @@ export const REQUEST_POST = 'REQUEST_POST';
 export const RECEIVE_POST = 'RECEIVE_POST';
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
 export const POST_REMOVED = 'POST_REMOVED';
-
 export const ADD_COMMENT = 'ADD_COMMENT';
-export const UPDATE_COMMENT = 'UPDATE_COMMENT';
 export const UPDATE_COMMENT_SUCCESS = 'UPDATE_COMMENT_SUCCESS';
 export const COMMENT_REMOVED = 'COMMENT_REMOVED';
 export const RECEIVE_COMMENT = 'RECEIVE_COMMENT';
@@ -78,7 +75,12 @@ export function updatePostSuccess (json) {
 export function getPosts() {
   return dispatch => {
     return API.getPosts()
-      .then(json => dispatch(receivePosts(json)));
+      .then((json) => {
+        json.forEach(post => {
+          dispatch(getPostComments(post.id))
+        });
+        return dispatch(receivePosts(json));
+      });
   }
 }
 
@@ -89,14 +91,14 @@ export function getPost (id) {
   }
 }
 
-export function receivePost(json) {
+export function receivePost (json) {
   return {
     type: RECEIVE_POST,
     post: json,
   }
 }
 
-export function receivePosts(json) {
+export function receivePosts (json) {
   return {
     type: RECEIVE_POSTS,
     posts: json,
@@ -105,23 +107,22 @@ export function receivePosts(json) {
 
 export function deletePost (id) {
   return dispatch => {
-    return API.deletePost(id)
-      .then(json => dispatch(postRemoved(json)));
+    return API.deletePost (id)
+      .then(json => dispatch(getPosts()));
   }
 }
 
-export function postRemoved(json) {
+export function postRemoved (json) {
   return {
     type: POST_REMOVED,
     post: json,
   }
 }
 
-
 export function dispatchAddComment (comment) {
   return dispatch => {
     return API.createComment (comment)
-      .then(json => dispatch (addComment(json)))
+      .then(json => dispatch(getPostComments(json.parentId)));
   }
 }
 
@@ -142,7 +143,7 @@ export function commentRemoved (id) {
 export function updateComment (id, comment) {
   return dispatch => {
     return API.updateComment (id, comment)
-      .then(json => dispatch(addComment(json)));
+      .then(json => dispatch(getPostComments(json.parentId)));
   }
 }
 

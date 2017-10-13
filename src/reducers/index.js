@@ -10,24 +10,12 @@ import {
   RECEIVE_POSTS,
   POST_REMOVED,
   ADD_COMMENT,
-  UPDATE_COMMENT,
   UPDATE_COMMENT_SUCCESS,
   COMMENT_REMOVED,
   RECEIVE_POST_COMMENTS,
 } from '../actions';
 
-const initialState = {
-  post: {
-    id: null,
-    timestamp: null,
-    title: null,
-    body: null,
-    author: null,
-    category: null,
-  }
-}
-
-function post (state = initialState.post, action) {
+function posts (state = [], action) {
   switch (action.type) {
     case ADD_POST :
       return [...state, action.post];
@@ -63,12 +51,11 @@ function post (state = initialState.post, action) {
 }
 
 function comments (state = [], action) {
+  let newState = state.slice();
   switch (action.type) {
     case ADD_COMMENT:
-      return [...state, action.comment];
-    
-    case UPDATE_COMMENT:
-      return [...state, action.comment];
+      newState.splice(action.index, 0, action.comment)
+      return newState;
 
     case UPDATE_COMMENT_SUCCESS :
       return Object.assign({}, state, action.comment);
@@ -85,6 +72,6 @@ function comments (state = [], action) {
 }
 
 export default combineReducers({
-  post,
+  posts,
   comments,
 });
