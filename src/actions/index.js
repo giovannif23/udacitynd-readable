@@ -104,7 +104,6 @@ export function receivePost (json) {
 }
 
 export function receivePosts (json) {
-  console.log('RECEIVE_POSTS', json)
   return {
     type: RECEIVE_POSTS,
     posts: json,

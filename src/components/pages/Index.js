@@ -137,7 +137,7 @@ class Index extends React.Component {
                   Score {post.voteScore}
                 </Tag>
                 <Tag>
-                  Comments {post.commentCount}
+                  {post.commentCount} Comments
                 </Tag>
 
                 <ButtonGroup>

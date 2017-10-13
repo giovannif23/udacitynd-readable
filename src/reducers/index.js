@@ -30,7 +30,10 @@ function posts (state = [], action) {
       }
 
     case UPDATE_POST_SUCCESS :
-      return Object.assign({}, state, action.post);
+      return [
+        ...state,
+        Object.assign({}, action.post),
+      ];
     
     case REQUEST_POST :
       return Object.assign({}, state, action.post);
