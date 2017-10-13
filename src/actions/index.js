@@ -75,7 +75,6 @@ export function getPosts() {
   return dispatch => {
     return API.getPosts()
       .then((json) => {
-        console.log('JONS', json)
         json.forEach((post, index) => {
           API.getPostComments(post.id)
             .then(res => {
@@ -105,6 +104,7 @@ export function receivePost (json) {
 }
 
 export function receivePosts (json) {
+  console.log('RECEIVE_POSTS', json)
   return {
     type: RECEIVE_POSTS,
     posts: json,

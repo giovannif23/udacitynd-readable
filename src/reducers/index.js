@@ -52,7 +52,7 @@ function posts (state = [], action) {
       }
     
     case RECEIVE_POSTS :
-      return Object.assign([{}], state, action.posts);
+      return action.posts;
     
     case POST_REMOVED:
       return Object.assign({}, state, action.posts);
