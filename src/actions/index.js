@@ -4,7 +4,6 @@ export const GET_CATEGORIES_SUCCESS = 'GET_CATEGORIES_SUCCESS';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
 export const UPDATE_POST = 'UPDATE_POST';
 export const UPDATE_POST_SUCCESS = 'UPDATE_POST_SUCCESS';
-export const REQUEST_POST = 'REQUEST_POST';
 export const RECEIVE_POST = 'RECEIVE_POST';
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
 export const POST_REMOVED = 'POST_REMOVED';
@@ -21,7 +20,7 @@ export function getCategories () {
   }
 }
 
-export function getCategoriesSuccess(json) {
+export function getCategoriesSuccess (json) {
   return {
     type: GET_CATEGORIES_SUCCESS,
     categories: json.categories,

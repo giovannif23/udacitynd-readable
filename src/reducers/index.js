@@ -35,24 +35,8 @@ function posts (state = [], action) {
         Object.assign({}, action.post),
       ];
     
-    case REQUEST_POST :
-      return Object.assign({}, state, action.post);
-    
     case RECEIVE_POST :
-      if (Object.keys(state).length) {
-        for (let key in state) {
-          if (state[key].id === action.post.id) {
-            updateIndex = key;
-          }
-        }
-      } else {
-        updateIndex = 0
-      }
-
-      return {
-        ...state,
-        [updateIndex]: action.post,
-      }
+      return action.post;
     
     case RECEIVE_POSTS :
       return action.posts;
