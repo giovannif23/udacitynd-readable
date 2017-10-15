@@ -112,7 +112,8 @@ export function receivePosts (json) {
 export function deletePost (id) {
   return dispatch => {
     return API.deletePost (id)
-      .then(json => dispatch(getPosts()));
+      .then(() => dispatch(deletePostComments(id)))
+      .then(() => dispatch(getPosts()));
   }
 }
 
@@ -183,6 +184,17 @@ export function deleteComment (id) {
   return dispatch => {
     return API.deleteComment (id)
       .then(json => dispatch(commentRemoved(id)));
+  }
+}
+
+export function deletePostComments (id) {
+  return dispatch => {
+    return API.getPostComments(id)
+      .then((json) => {
+        json.forEach((comment) => {
+          API.deleteComment(comment.id);
+        })
+      });
   }
 }
 
