@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { BrowserRouter } from 'react-router-dom';
 import './App.css';
 
@@ -17,13 +17,15 @@ const App = () => {
   return (
     <BrowserRouter>
       <div className="app">
-        <Route exact path="/" component={Index} />
-        <Route exact path="/:category/posts" component={PostsByCategory} />
-        <Route exact path="/post" component={PostCreate} />
-        <Route exact path="/post/:id/edit" component={PostEdit} />
-        <Route exact path="/post/:id" component={PostIndex} />
-        <Route exact path="/comment/:id" component={CommentEdit} />
-        <Route path="/404" component={ErrorPage} />
+        <Switch>
+          <Route exact path="/" component={Index} />
+          <Route exact path="/:category/posts" component={PostsByCategory} />
+          <Route exact path="/post" component={PostCreate} />
+          <Route exact path="/post/:id/edit" component={PostEdit} />
+          <Route exact path="/post/:id" component={PostIndex} />
+          <Route exact path="/comment/:id" component={CommentEdit} />
+          <Route component={ErrorPage} />
+        </Switch>
       </div>
     </BrowserRouter>
   );
