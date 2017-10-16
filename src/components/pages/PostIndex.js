@@ -162,11 +162,12 @@ class PostIndex extends React.Component {
       .then((res) => {
         const { post } = res;
 
-        // Return to index if object is empty since
-        // API still returns 200 even when deleted
-        if (isEmpty(post)) {
-          this.props.history.push('/')
+        // Send to 404 if object is empty since API
+        // still returns 200 even when deleted
+        if (isEmpty(post) || post.error) {
+          this.props.history.push('/404')
         }
+
         this.setState({
           post
         });
@@ -179,10 +180,10 @@ class PostIndex extends React.Component {
               comments: sortedComments,
             });
           });
-        })
-        .catch((err) => {
-          console.log('err', err)
-        });
+      })
+      .catch((err) => {
+        console.log('err', err)
+      });
   }
 
   componentDidUpdate(prevProps) {
