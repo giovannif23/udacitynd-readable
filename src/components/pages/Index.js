@@ -13,7 +13,7 @@ import { capitalize } from '../utils/helpers';
 import PageTemplate from '../templates/PageTemplate';
 import Header from '../organisms/Header';
 import { Alert, Button, Card, Icon, Input, Select, Tag, Row, Col, message, Popconfirm } from 'antd';
-import { sortBy } from 'lodash';
+import { isEmpty, sortBy } from 'lodash';
 
 const ButtonGroup = Button.Group;
 const Option = Select.Option;

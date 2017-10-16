@@ -15,7 +15,7 @@ import { capitalize, uuidv4 } from '../utils/helpers';
 import moment from 'moment';
 import PageTemplate from '../templates/PageTemplate';
 import Header from '../organisms/Header';
-import { sortBy } from 'lodash';
+import { isEmpty, sortBy } from 'lodash';
 import { 
   Avatar, 
   Button, 
@@ -161,6 +161,12 @@ class PostIndex extends React.Component {
     this.props.get(id)
       .then((res) => {
         const { post } = res;
+
+        // Return to index if object is empty since
+        // API still returns 200 even when deleted
+        if (isEmpty(post)) {
+          this.props.history.push('/')
+        }
         this.setState({
           post
         });
@@ -173,6 +179,9 @@ class PostIndex extends React.Component {
               comments: sortedComments,
             });
           });
+        })
+        .catch((err) => {
+          console.log('err', err)
         });
   }
 
